@@ -3,7 +3,7 @@
 ## Scope of spike
 
 Application events are volatile events used to emit real-time small messages about state changes.\
-In the spike we use [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) with binder Azure.
+In the spike we use [Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) with binder Azure to spread *application events* amound listeners.
 
 ## Notable details
 
@@ -19,6 +19,9 @@ In Spring Stream is introduced also [new programming model based on functions](h
 5. Time to clean up:
 6. Stop applications
 7. Delete created Azure Event Hub if you don't want to reuse it (removing event hub => costs saving)
+
+## Conclusions
+Azure Service Bus Topic does not fit our needs. It does not distribute data for all listener, but it allows to add virtual queues (named: subscriptions) per topic what makes the whole idea useless from lightway spreating 
 
 Interesting is Azure examples are based on annotations which is considered as [legacy approach]
 )

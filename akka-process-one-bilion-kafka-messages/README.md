@@ -1,0 +1,3 @@
+# Test processing speed for 1_000_000_000 messages
+
+Sometimes we need to know some numbers and processing time ...

@@ -13,6 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <akka-typed.version>2.6.1</akka-typed.version>
   </properties>
 
   <dependencies>
@@ -26,13 +27,13 @@
     <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-actor-typed_2.13</artifactId>
-      <version>2.6.0-M8</version>
+      <version>${akka-typed.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-slf4j_2.13</artifactId>
-      <version>2.6.0-M8</version>
+      <version>${akka-typed.version}</version>
     </dependency>
     <!-- https://doc.akka.io/docs/akka/2.4/scala/logging.html#SLF4J -->
     <dependency>
@@ -135,12 +136,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M3</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.0.0-M3</version>
+          <version>3.0.0-M4</version>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>

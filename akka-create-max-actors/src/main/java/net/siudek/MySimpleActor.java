@@ -3,8 +3,6 @@ package net.siudek;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 /**
  * Actor designed to create new clone of themself and increase global counter.
@@ -12,7 +10,7 @@ import akka.event.LoggingAdapter;
 public final class MySimpleActor extends AbstractActor {
 
     /** wanna to log? here is your tool */
-    private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+    // private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
     @Override
     public Receive createReceive() {

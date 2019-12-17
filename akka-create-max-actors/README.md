@@ -9,7 +9,7 @@
 * mvn versions:display-plugin-updates
 * mvn versions:display-dependency-updates
 
-## How to run - quick version
+## How to run - quick version to see how it works in general
 
 * mvn clean compile
 * mvn exec:java -D"exec.mainClass=akka.Main" -D"exec.arguments=net.siudek.AppActor"

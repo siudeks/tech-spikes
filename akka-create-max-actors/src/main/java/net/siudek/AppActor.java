@@ -41,17 +41,27 @@ public final class AppActor extends AbstractActor {
         super.postStop();
     }
 
-    LocalTime whenPrint = LocalTime.now();
+    /**
+     * Timestamp of last print to allow measure what is delay between 'now'
+     * and last print.
+     */
+    private LocalTime whenPrinted = LocalTime.now();
+
+    /** minimum delay between printing number of created actors. */
+    private final java.time.Duration printDelayMs =
+                  java.time.Duration.ofMillis(10);
 
     @Override
     public Receive createReceive() {
         return receiveBuilder().match(Integer.class, v -> {
             current = v + 1;
 
-            LocalTime now = LocalTime.now();
-            if (now.minus(java.time.Duration.ofMillis(10)).isAfter(whenPrint)) {
-                whenPrint = now;
-                log.info("Instance " + current);
+            final var now = LocalTime.now();
+            final var fromLastPrint = now.minus(printDelayMs);
+
+            if (fromLastPrint.isAfter(whenPrinted)) {
+                whenPrinted = now;
+                log.info("Instance no: " + current);
             }
 
             var initialActor = context().actorOf(MySimpleActor.props());

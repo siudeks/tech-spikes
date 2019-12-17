@@ -9,9 +9,6 @@ import akka.actor.Props;
  */
 public final class MySimpleActor extends AbstractActor {
 
-    /** wanna to log? here is your tool */
-    // private LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-
     @Override
     public Receive createReceive() {
         return receiveBuilder().match(Integer.class, v -> {

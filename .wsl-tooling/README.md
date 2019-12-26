@@ -10,5 +10,4 @@ if you decided to use VSCode remote WSL extension, find below my list of tools w
 - install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux) to monitor remote aks instances
 - install openjdk-11 **sudo apt install openjdk-11-jdk**
 - install [dotnet core 3.1](https://docs.microsoft.com/dotnet/core/install/linux-package-manager-ubuntu-1804)
- - install [node 12 with npm](https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/)
-- use **export DOCKER_HOST='tcp://0.0.0.0:2375'** to allow working WSL docker commands with yours windows docker desktop
+- install [node 12 with npm](https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/)

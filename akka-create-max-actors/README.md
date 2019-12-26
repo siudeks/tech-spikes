@@ -12,13 +12,14 @@
 ## How to run - quick version to see how it works in general
 
 * mvn clean compile
-* mvn exec:java -D"exec.mainClass=akka.Main" -D"exec.arguments=net.siudek.AppActor"
+* mvn exec:java -D"exec.mainClass=net.siudek.Program"
 
 ## How to run - long version with memory limitation
 
 * mvn clean verify
 * java -jar -Xmx5m target/crash-test-akka-1.0-SNAPSHOT-allinone.jar net.siudek.AppActor
   ... and observer increasing number of created actors
+  in my case displayed result is about 750 created actors before observing **java.lang.OutOfMemoryError**
 
 ## Interesting articles using to build the project
 

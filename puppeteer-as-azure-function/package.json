@@ -9,9 +9,12 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "puppeteer": "^2.0.0"
+  },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
+    "@types/puppeteer": "^2.0.0",
     "typescript": "^3.3.3"
   }
 }

@@ -26,15 +26,14 @@ resource "azurerm_storage_account" "example" {
 }
 
 resource "random_id" "example-acr" {
-  byte_length = 4
+  byte_length = 8
 }
 resource "azurerm_container_registry" "example" {
-  name                     = "containerRegistry${random_id.example-acr.hex}"
+  name                     = "acr${random_id.example-acr.hex}"
   resource_group_name      = azurerm_resource_group.example.name
   location                 = azurerm_resource_group.example.location
-  sku                      = "Premium"
+  sku                      = "Basic"
   admin_enabled            = false
-  georeplication_locations = ["West Europe"]
 }
 
 resource "azurerm_app_service_plan" "example" {
@@ -43,34 +42,41 @@ resource "azurerm_app_service_plan" "example" {
   resource_group_name = azurerm_resource_group.example.name
 
   kind                = "linux"
+  reserved            = true
 
   sku {
-    tier = "Standard"
-    size = "S1"
+    tier = "Free"
+    size = "F1"
   }
 }
 
+resource "random_id" "example-appservice" {
+  byte_length = 4
+}
 resource "azurerm_app_service" "example" {
-  name                = "azure-functions-test-service-plan"
+  name                = "my-fundction-${random_id.example-appservice.hex}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
   app_service_plan_id = azurerm_app_service_plan.example.id
   
-  site_config {
-     always_on        = true
-     linux_fx_version = "DOCKER|${azurerm_container_registry.example.login_server}/testdocker-alpine:v1"
-  }
+  # site_config {
+  #    always_on        = true
+  #    linux_fx_version = "DOCKER|${azurerm_container_registry.example.login_server}/testdocker-alpine:v1"
+  # }
 
-  app_settings = {
-    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-    DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.example.login_server}"
-    DOCKER_REGISTRY_SERVER_USERNAME     = azurerm_container_registry.example.admin_username
-    DOCKER_REGISTRY_SERVER_PASSWORD     = azurerm_container_registry.example.admin_password
-  }
+  # app_settings = {
+  #   WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
+  #   DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.example.login_server}"
+  #   DOCKER_REGISTRY_SERVER_USERNAME     = azurerm_container_registry.example.admin_username
+  #   DOCKER_REGISTRY_SERVER_PASSWORD     = azurerm_container_registry.example.admin_password
+  # }
 }
 
+resource "random_id" "function-app" {
+  byte_length = 4
+}
 resource "azurerm_function_app" "example" {
-  name                      = "test-azure-functions"
+  name                      = "test-azure-functions-${random_id.function-app.hex}"
   location                  = azurerm_resource_group.example.location
   resource_group_name       = azurerm_resource_group.example.name
   app_service_plan_id       = azurerm_app_service_plan.example.id

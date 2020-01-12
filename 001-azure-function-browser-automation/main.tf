@@ -44,9 +44,10 @@ resource "azurerm_app_service_plan" "example" {
   kind                = "linux"
   reserved            = true
 
+  # the chipest hosting. Netther shared nor free work with Containers
   sku {
-    tier = "Free"
-    size = "F1"
+    tier = "Basic"
+    size = "B1"
   }
 }
 
@@ -59,17 +60,29 @@ resource "azurerm_app_service" "example" {
   resource_group_name = azurerm_resource_group.example.name
   app_service_plan_id = azurerm_app_service_plan.example.id
   
-  # site_config {
-  #    always_on        = true
-  #    linux_fx_version = "DOCKER|${azurerm_container_registry.example.login_server}/testdocker-alpine:v1"
-  # }
+  site_config {
+     always_on        = true
 
-  # app_settings = {
-  #   WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-  #   DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.example.login_server}"
-  #   DOCKER_REGISTRY_SERVER_USERNAME     = azurerm_container_registry.example.admin_username
-  #   DOCKER_REGISTRY_SERVER_PASSWORD     = azurerm_container_registry.example.admin_password
-  # }
+     # https://github.com/terraform-providers/terraform-provider-azurerm/issues/1710#issue-347114760
+     #  linux_fx_version = "DOCKER|${azurerm_container_registry.example.login_server}/testdocker-alpine:v1"
+     linux_fx_version = "DOCKER|loconomics/loconomics"
+  }
+
+  app_settings = {
+    # Do not attach Storage by default 
+    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
+    
+    /*
+      # Settings for private Container Registires
+    DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.example.login_server}"
+    DOCKER_REGISTRY_SERVER_USERNAME     = azurerm_container_registry.example.admin_username
+    DOCKER_REGISTRY_SERVER_PASSWORD     = azurerm_container_registry.example.admin_password
+    */
+  }
+
+  identity { 
+    type = "SystemAssigned" 
+  } 
 }
 
 resource "random_id" "function-app" {

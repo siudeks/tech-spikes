@@ -15,6 +15,6 @@ How to run the spike
 - **az login** to connect to Azure
 - **terraform init / apply** to create structure
 
-Used articles:
+## Used / inspired by
 - https://www.merrell.dev/posts/2018/09/28/azure-web-apps-for-containers-using-terraform/
-
+- https://medium.com/@bogdanbujdea/running-puppeteer-in-azure-container-instances-b24fb0a8d3e

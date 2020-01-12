@@ -25,24 +25,49 @@ resource "azurerm_storage_account" "example" {
   account_replication_type = "LRS"
 }
 
+resource "random_id" "example-acr" {
+  byte_length = 4
+}
+resource "azurerm_container_registry" "example" {
+  name                     = "containerRegistry${random_id.example-acr.hex}"
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  sku                      = "Premium"
+  admin_enabled            = false
+  georeplication_locations = ["West Europe"]
+}
+
 resource "azurerm_app_service_plan" "example" {
+  name                = "example-appserviceplan"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  kind                = "linux"
+
+  sku {
+    tier = "Standard"
+    size = "S1"
+  }
+}
+
+resource "azurerm_app_service" "example" {
   name                = "azure-functions-test-service-plan"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
+  app_service_plan_id = azurerm_app_service_plan.example.id
   
-  kind                = "linux"
-
   site_config {
      always_on        = true
-     linux_fx_version = "DOCKER|${data.azurerm_container_registry.containertest.login_server}/testdocker-alpine:v1"
+     linux_fx_version = "DOCKER|${azurerm_container_registry.example.login_server}/testdocker-alpine:v1"
   }
 
-  app_settings {
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "DOCKER_REGISTRY_SERVER_URL"          = "https://${data.azurerm_container_registry.containertest.login_server}"
-    "DOCKER_REGISTRY_SERVER_USERNAME"     = "${data.azurerm_container_registry.containertest.admin_username}"
-    "DOCKER_REGISTRY_SERVER_PASSWORD"     = "${data.azurerm_container_registry.containertest.admin_password}"
-  }}
+  app_settings = {
+    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
+    DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.example.login_server}"
+    DOCKER_REGISTRY_SERVER_USERNAME     = azurerm_container_registry.example.admin_username
+    DOCKER_REGISTRY_SERVER_PASSWORD     = azurerm_container_registry.example.admin_password
+  }
+}
 
 resource "azurerm_function_app" "example" {
   name                      = "test-azure-functions"

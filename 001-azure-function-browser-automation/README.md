@@ -4,13 +4,19 @@
 
 Sometimes we need to conduct a scenario using webautomated browser. Actually when we have defined input and output of operationa, then challlenge is to automate web browser to obtain final values.
 
-I would like to avoid using Selenium because it is error prone (according to my experience), but rather using [PuppeteerSharp](https://github.com/kblok/puppeteer-sharp) which should be async and fast.
+I would like to avoid using Selenium because it is error prone (according to my experience), but rather using [Puppeteer](https://github.com/puppeteer/puppeteer) which should be async, fast and - in my case - supported by using TypeScript.
 
-I would like to use only Azure Function to avoid expensive keeping working webbrowser instances and to magane their lifecycle and queueing requests. I tried to use [puppeteer](https://www.npmjs.com/package/puppeteer) to automate browser as well as [puppeteer sharp](https://www.nuget.org/packages/PuppeteerSharp). Both solution do not work for some reasons.
+My spike covers using [dockerized puppeter](https://github.com/ltwlf/azure-functions-docker-puppeteer)
 
-Finally, in the spike I am testing [dockerized puppeter](https://github.com/ltwlf/azure-functions-docker-puppeteer)
+## prerequisits
+- installed [azure function core tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#v2). I suggest version v2. It forces you to install nodejs version as well. In my case finally I had to add [extra switches](https://github.com/npm/npm/issues/17268#issuecomment-310167614)
 
 How to run the spike
+
+- Step 1 - make your function working
+ - set context to [code](code) folder
+ - **npm **
+
 
 - **az login** to connect to Azure
 - **terraform init / apply** to create structure

@@ -41,23 +41,15 @@ public class MyMediator {
     private Behavior<Command> inactive() {
         timers.startSingleTimer(new Object(), Timeout.INSTANCE, durationForCompletion);
         return Behaviors.receive(Command.class)
-            // .onMessage(Timeout.INSTANCE.getClass(), this::timeouted)
+            .onMessage(Timeout.INSTANCE.getClass(), this::timeouted)
             .build();
     }
 
     private Behavior<Command> timeouted(Timeout ignored) {
         this.operationResult.complete(new Result.InternalTimeout());
-        return Behaviors.same();
+        return Behaviors.stopped();
     }
     
-    // private Behavior<MyCommand> onInactive(MyCommand message) {
-    //     return Behaviors.setup(context -> new Active(context, message));
-    // }
-
-    private Behavior<Command> on(Command cmd) {
-        return Behaviors.same();
-    }
-
     /** Initial message to start operations. */
     public interface Command {
 

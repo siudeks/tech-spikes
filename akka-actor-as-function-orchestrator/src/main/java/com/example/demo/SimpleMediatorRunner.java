@@ -13,7 +13,7 @@ import akka.actor.typed.javadsl.Behaviors;
 import lombok.Value;
 
 
-
+/** Allows to run given Behavior and send initial message. */
 public interface SimpleMediatorRunner {
     <T> void spawn(Behavior<T> behaviorToSpawnAndRun, T initialMessage);
 }
@@ -21,6 +21,7 @@ public interface SimpleMediatorRunner {
 @Component
 class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
 
+    /** The only one purpose of the Actor System is to run Mediators. */
     private ActorSystem<CreateRequest<?>> actorSystem;
     
     public SimpleMediatorRunnerImpl() {

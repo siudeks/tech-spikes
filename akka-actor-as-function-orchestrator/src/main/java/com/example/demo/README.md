@@ -20,6 +20,14 @@ In my bueatyful application I have some nagic place, called 'webapi' layer. It i
 
 Controller method is - the most often - a simple Request/Response operation. At least it seems so from perspective of the invoker.
 
+## Problem
+
+## Limitations
+
+## Risks
+
+## Solution
+
 ## Interesting links
 
 - [Akka Typed - Testing](https://doc.akka.io/docs/akka/current/typed/testing.html#controlling-the-scheduler)

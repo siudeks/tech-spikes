@@ -1,9 +1,11 @@
 package com.example.demo;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.springframework.stereotype.Component;
 
+import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.ActorContext;
@@ -30,7 +32,7 @@ class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
     private Behavior<CreateRequest<?>> create(ActorContext<CreateRequest<?>> ctx, CreateRequest<?> msg) {
         var randomName = UUID.randomUUID().toString();
         var mediator = ctx.spawn(msg.behavior, randomName);
-        mediator.tell(msg.initialMessage);
+        msg.continuation.accept(mediator);
         return Behaviors.same();
     }
 
@@ -42,12 +44,18 @@ class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
     @Value
     private class CreateRequest<T> {
         private Behavior<T> behavior;
-        private T initialMessage;
+        private Consumer<ActorRef<?>> continuation;
     }
 
     @Override
     public <T> void spawn(Behavior<T> behaviorToSpawn, T initialMessage) {
-        var request = new CreateRequest<>(behaviorToSpawn, initialMessage);
+        Consumer<ActorRef<?>> kickStartBehavior = ar -> {
+            @SuppressWarnings("unchecked")
+            var typed = (ActorRef<T>) ar;
+            typed.tell(initialMessage);
+        };
+        
+        var request = new CreateRequest<>(behaviorToSpawn, kickStartBehavior);
         actorSystem.tell(request);
     }
 }

@@ -23,10 +23,9 @@ public class MyController {
         var beh = MyMediator
             .create(result, Duration.ofSeconds(5), nonRespondingService);
 
-        runner.spawn(beh);
+        runner.spawn(beh, new MyMediator.Command.Verify("some name", "some password"));
 
         return result
             .thenApply(it -> it.toString());
-             
     }
 }

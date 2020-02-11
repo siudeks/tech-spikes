@@ -13,8 +13,9 @@ import akka.actor.typed.javadsl.Behaviors;
 import lombok.Value;
 
 
+
 public interface SimpleMediatorRunner {
-    <T> void spawn(Behavior<T> behaviorToSpawn, T initialMessage);
+    <T> void spawn(Behavior<T> behaviorToSpawnAndRun, T initialMessage);
 }
 
 @Component

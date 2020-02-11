@@ -4,11 +4,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,15 +18,12 @@ import lombok.SneakyThrows;
 public final class SimpleMediatorRunnerTests {
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private SimpleMediatorRunner runner;
 
     @Test
     @SneakyThrows
     public void shouldRunSimpleBehavior() {
         
-        var runner = applicationContext.getBean(SimpleMediatorRunner.class);
-        Assumptions.assumeThat(runner).isNotNull();
-
         var touched = new CompletableFuture<Boolean>()
             .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
 
@@ -39,6 +34,26 @@ public final class SimpleMediatorRunnerTests {
         var simpleMediatorInitialMessage = new Object();
 
         runner.spawn(simpleMediator, simpleMediatorInitialMessage);
+
+        Assertions.assertThat(touched.get()).isTrue();
+    }
+
+    @Test
+    @SneakyThrows
+    public void shouldRunSimpleSecondBehavior() {
+        
+        var touched = new CompletableFuture<Boolean>()
+            .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
+
+        var firstMediator = Behaviors.stopped();
+        var secondMediator = Behaviors.receiveMessage((Object ignored) -> {
+            touched.complete(Boolean.TRUE);
+            return Behaviors.stopped();
+        });
+
+        var ignoredMessage = new Object();
+        runner.spawn(firstMediator, ignoredMessage);
+        runner.spawn(secondMediator, ignoredMessage);
 
         Assertions.assertThat(touched.get()).isTrue();
     }

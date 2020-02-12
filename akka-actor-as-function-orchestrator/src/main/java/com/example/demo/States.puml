@@ -1,0 +1,17 @@
+@startuml MyMediator states
+
+[*] --> Inactive
+
+Inactive : Initial state of the Mediator.
+Inactive : The Mediator is waiting for his Activation command.
+
+Inactive -> Active : Operation has started. In that state the whole magic is starting.
+
+Inactive -> Timeouted : Unfortunatelly, no activation has occured.
+
+Active -> Timeouted
+
+Timeouted --> [*]
+
+
+@enduml

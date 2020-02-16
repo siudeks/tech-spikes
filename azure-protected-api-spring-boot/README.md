@@ -9,10 +9,18 @@
 
 Demo:
 1. mvn spring-boot:run
-2. try http://localhost:8080/api/cars to see JSON list of cars
+2. try http://localhost:8080/api/cars to see unsecured JSON list of cars
+3. Uncomment application.properties and put values:
+   **azure.activedirectory.client-id**=........-....-....-....-............
+   azure.activedirectory.client-secret=..................
+   azure.activedirectory.user-group.allowed-groups=group1, group2
+4. run application once again mvn spring-boot:run
+5. use postman to see if http://localhost:8080/api/cars is secured
+
 
 
 
 ## Used articles
+- https://www.bruttin.com/2017/11/21/azure-api-postman.html
 - https://github.com/Microsoft/azure-spring-boot/blob/master/azure-spring-boot-starters/azure-active-directory-spring-boot-starter/README.md
 - https://azure.microsoft.com/en-us/blog/use-azure-active-directory-with-spring-security-5-0-for-oauth-2-0/

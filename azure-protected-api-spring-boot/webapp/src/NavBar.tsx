@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from 'react-router-dom';
 import {
   Collapse,
@@ -58,40 +58,38 @@ function AuthNavItem(props) {
   );
 }
 
-export default class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
+interface NavBarProps {
+  isAuthenticated: boolean;
+  authButtonMethod: any;
+  user: any;
+}
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
+export const NavBar: React.FC<NavBarProps> = (props) => {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
   }
 
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
-  render() {
-    // Only show calendar nav item if logged in
+  // TODO render
     let calendarLink = null;
-    if (this.props.isAuthenticated) {
-      calendarLink = (
-        <NavItem>
-          <RouterNavLink to="/calendar" className="nav-link" exact>Calendar</RouterNavLink>
-        </NavItem>
-      );
-    }
+    // // Only show calendar nav item if logged in
+    // if (this.props.isAuthenticated) {
+    //   calendarLink = (
+    //     <NavItem>
+    //       <RouterNavLink to="/calendar" className="nav-link" exact>Calendar</RouterNavLink>
+    //     </NavItem>
+    //   );
+    // }
 
     return (
       <div>
         <Navbar color="dark" dark expand="md" fixed="top">
           <Container>
             <NavbarBrand href="/">React Graph Tutorial</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
+            <NavbarToggler onClick={toggle} />
+            <Collapse isOpen={isOpen} navbar>
               <Nav className="mr-auto" navbar>
                 <NavItem>
                   <RouterNavLink to="/" className="nav-link" exact>Home</RouterNavLink>
@@ -106,9 +104,9 @@ export default class NavBar extends React.Component {
                   </NavLink>
                 </NavItem>
                 <AuthNavItem
-                  isAuthenticated={this.props.isAuthenticated}
-                  authButtonMethod={this.props.authButtonMethod}
-                  user={this.props.user} />
+                  isAuthenticated={props.isAuthenticated}
+                  authButtonMethod={props.authButtonMethod}
+                  user={props.user} />
               </Nav>
             </Collapse>
           </Container>
@@ -116,4 +114,3 @@ export default class NavBar extends React.Component {
       </div>
     );
   }
-}

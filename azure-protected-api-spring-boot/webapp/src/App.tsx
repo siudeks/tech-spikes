@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { UserAgentApplication } from 'msal';
 import NavBar from './NavBar';
-import ErrorMessage from './ErrorMessage';
+import { ErrorMessage } from './ErrorMessage';
 import Welcome from './Welcome';
 import config from './Config';
 import { getUserDetails } from './GraphService';

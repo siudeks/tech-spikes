@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { UserAgentApplication } from 'msal';
-import NavBar from './NavBar';
 import { ErrorMessage } from './ErrorMessage';
-import Welcome from './Welcome';
 import config from './Config';
 import { getUserDetails } from './GraphService';
 import 'bootstrap/dist/css/bootstrap.css';
 import Calendar from './Calendar';
+import { NavBar } from './NavBar';
+import { Welcome } from './Welcome';
 
 interface AppState {
   isAuthenticated: boolean;

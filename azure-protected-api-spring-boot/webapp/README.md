@@ -1,6 +1,7 @@
 # Simple web app to integrate with Azure AD identity provider
 
 ## Used articles
+- https://airbnb.io/enzyme/docs/installation/ to install enzyme
 - https://docs.microsoft.com/en-us/graph/tutorials/react
 
 ## How to run the app

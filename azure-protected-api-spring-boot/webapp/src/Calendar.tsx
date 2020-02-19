@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Table } from "reactstrap";
 import moment from "moment";
 import appConfig from "./Config";
-import { getEvents } from "./GraphService";
+import { getEvents, EventInfo } from "./GraphService";
 import * as Msal from "msal";
 // We have to import explicitly
 // https://github.com/microsoftgraph/msgraph-sdk-javascript/issues/230
@@ -16,9 +16,10 @@ function formatDateTime(dateTime) {
     .local()
     .format("M/D/YY h:mm A");
 }
+import * as MicrosoftGraph from "@microsoft/microsoft-graph-types"
 
 export const Calendar: React.FC<{}> = props => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(new Array<EventInfo>());
 
   useEffect(() => {
     const msalConfig: Msal.Configuration = {
@@ -36,11 +37,12 @@ export const Calendar: React.FC<{}> = props => {
     var subscription = from(agent.acquireTokenSilent(params))
       .pipe(
         // Get the user's events
-        map(it => getEvents(it))
+        map(it => getEvents(it.accessToken)),
+        flatMap(it => it)
       )
       .subscribe(it => {
         // Update the array of events in state
-        setEvents({ events: events.value });
+        setEvents(it);
       });
 
       // TODO return subscription.unsubscribe;
@@ -60,16 +62,14 @@ export const Calendar: React.FC<{}> = props => {
           </tr>
         </thead>
         <tbody>
-          {this.state.events.map(function(event) {
-            return (
+          {events.map(event => (
               <tr key={event.id}>
-                <td>{event.organizer.emailAddress.name}</td>
+                <td>{event?.organizer?.emailAddress?.name}</td>
                 <td>{event.subject}</td>
-                <td>{formatDateTime(event.start.dateTime)}</td>
-                <td>{formatDateTime(event.end.dateTime)}</td>
+                <td>{formatDateTime(event?.start?.dateTime)}</td>
+                <td>{formatDateTime(event?.end?.dateTime)}</td>
               </tr>
-            );
-          })}
+            ))}
         </tbody>
       </Table>
     </div>

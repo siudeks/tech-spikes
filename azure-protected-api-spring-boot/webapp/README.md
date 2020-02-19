@@ -1,6 +1,8 @@
 # Simple web app to integrate with Azure AD identity provider
 
 ## Used articles
+- https://github.com/microsoftgraph/msgraph-sdk-javascript/issues/230
+- https://www.npmjs.com/package/@microsoft/microsoft-graph-client to use MSAL
 - https://airbnb.io/enzyme/docs/installation/ to install enzyme
 - https://docs.microsoft.com/en-us/graph/tutorials/react
 

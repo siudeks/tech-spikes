@@ -15,10 +15,10 @@ public class MyMediator {
     private VerificationService.Do service;
     private Duration durationForCompletion;
 
-    public MyMediator(final CompletableFuture<Result> resultHandler,
-                          final TimerScheduler<Command> timers,
-                          final Duration timeout,
-                          final VerificationService.Do service) {
+    private MyMediator(final CompletableFuture<Result> resultHandler,
+                       final TimerScheduler<Command> timers,
+                       final Duration timeout,
+                       final VerificationService.Do service) {
 
         this.operationResult = resultHandler;
         this.timers = timers;

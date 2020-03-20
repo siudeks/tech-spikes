@@ -1,4 +1,9 @@
-Controller method is - the most often - a simple Request/Response operation. At least it seems so from perspective of the invoker.
+Rest ontroller's method is expected to be a (simple?) Request/Response operation between Http request and internal application services. At least it looks like so from perspective of the invoker.
+
+In fact, there is a place when uncontrolled blow of coding is starting
+
+Let's skip Rest Controllers with synchronous access to multiple data sources, becaus it is 
+Developers, when they create separated services to support
 
 ## Interesting links
 

@@ -1,4 +1,4 @@
-# WSL tools useful to work
+# Ubuntu tools useful to prepare dev environment
 
 if you decided to use VSCode remote WSL extension, find below my list of tools which I found useful on my WSL dev environment
 

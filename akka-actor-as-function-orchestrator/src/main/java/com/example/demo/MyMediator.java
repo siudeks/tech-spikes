@@ -8,17 +8,19 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.TimerScheduler;
 import lombok.Value;
 
-public class MyMediator {
+public final class MyMediator extends BaseMediator<MyMediator.Command, MyMediator.Result> {
 
     private final CompletableFuture<Result> operationResult;
     private TimerScheduler<Command> timers;
     private VerificationService.Do service;
     private Duration durationForCompletion;
 
-    private MyMediator(final CompletableFuture<Result> resultHandler,
+    private MyMediator(final CompletableFuture<MyMediator.Result> resultHandler,
                        final TimerScheduler<Command> timers,
                        final Duration timeout,
                        final VerificationService.Do service) {
+        
+        super(resultHandler, new MyMediator.Result.InternalTimeout());
 
         this.operationResult = resultHandler;
         this.timers = timers;

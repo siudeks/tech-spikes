@@ -51,6 +51,24 @@ public final class MyMediatorTests {
             .isTrue();
 
     }
+
+    // @Test
+    // public void shouldAllowToHandleMessage() {
+    //     var myMessage = new MyCommand() {};
+    //     var myResult = new MyResult() {};
+    //     var handler = Behaviors
+    //         .receive(MyCommand.class)
+    //         .onMessage(myMessage.getClass(), s -> Behaviors.same())
+    //         .build();
+            
+    //     var mediator = MyMediator.create(resultHandler, timeout, service);
+    // }
+
+    interface MyCommand {
+    }
+
+    interface MyResult {
+    }
 }
 
 class TerminationWatcher {

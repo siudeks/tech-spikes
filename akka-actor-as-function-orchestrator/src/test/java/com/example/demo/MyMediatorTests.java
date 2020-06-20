@@ -2,18 +2,20 @@ package com.example.demo;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.reactivestreams.Subscriber;
 
+import akka.NotUsed;
 import akka.actor.testkit.typed.javadsl.ActorTestKit;
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.Terminated;
 import akka.actor.typed.javadsl.Behaviors;
 import lombok.SneakyThrows;
+import reactor.core.publisher.MonoProcessor;
 
 public final class MyMediatorTests {
 
@@ -35,7 +37,7 @@ public final class MyMediatorTests {
         var beh = MyMediator.create(result, Duration.ZERO, nonRespondingService);
         var sut = testKit.spawn(beh);
 
-        var terminationSignal = new AtomicBoolean();
+        var terminationSignal = MonoProcessor.<NotUsed>create();
         testKit.spawn(TerminationWatcher.create(sut, terminationSignal));
 
 
@@ -47,40 +49,23 @@ public final class MyMediatorTests {
             .isExactlyInstanceOf(MyMediator.Result.InternalTimeout.class);
 
         Assertions
-            .assertThat(terminationSignal.get())
-            .isTrue();
+            .assertThat(terminationSignal.blockOptional())
+            .isNotEmpty();
 
     }
 
-    // @Test
-    // public void shouldAllowToHandleMessage() {
-    //     var myMessage = new MyCommand() {};
-    //     var myResult = new MyResult() {};
-    //     var handler = Behaviors
-    //         .receive(MyCommand.class)
-    //         .onMessage(myMessage.getClass(), s -> Behaviors.same())
-    //         .build();
-            
-    //     var mediator = MyMediator.create(resultHandler, timeout, service);
-    // }
-
-    interface MyCommand {
-    }
-
-    interface MyResult {
-    }
 }
 
 class TerminationWatcher {
 
     public static Behavior<Void> create(final ActorRef<?> watchedActor,
-                                        final AtomicBoolean terminationMarker) {
+                                        final Subscriber<NotUsed> terminationMarker) {
                             
         return Behaviors.setup(ctx -> {
             ctx.watch(watchedActor);
             return Behaviors.receiveSignal((a, b) -> {
                 if (b instanceof Terminated) {
-                    terminationMarker.set(true);
+                    terminationMarker.onNext(NotUsed.getInstance());
                 };
                 return Behaviors.stopped();
             });

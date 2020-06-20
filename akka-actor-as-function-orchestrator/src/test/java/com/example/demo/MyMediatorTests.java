@@ -2,6 +2,9 @@ package com.example.demo;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
@@ -37,8 +40,9 @@ public final class MyMediatorTests {
         var beh = MyMediator.create(result, Duration.ZERO, nonRespondingService);
         var sut = testKit.spawn(beh);
 
-        var terminationSignal = MonoProcessor.<NotUsed>create();
-        testKit.spawn(TerminationWatcher.create(sut, terminationSignal));
+        var terminationSignal = new CompletableFuture<Boolean>()
+                                .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
+        testKit.spawn(TerminationWatcher.create(sut, terminationSignal::complete));
 
 
         sut.tell(new MyMediator.Command.Verify("ignored", "ignored"));
@@ -59,13 +63,13 @@ public final class MyMediatorTests {
 class TerminationWatcher {
 
     public static Behavior<Void> create(final ActorRef<?> watchedActor,
-                                        final Subscriber<NotUsed> terminationMarker) {
+                                        final Consumer<Boolean> terminationMarker) {
                             
         return Behaviors.setup(ctx -> {
             ctx.watch(watchedActor);
             return Behaviors.receiveSignal((a, b) -> {
                 if (b instanceof Terminated) {
-                    terminationMarker.onNext(NotUsed.getInstance());
+                    terminationMarker.accept(Boolean.TRUE);
                 };
                 return Behaviors.stopped();
             });

@@ -1,15 +1,16 @@
 # WIP
 
-## WebBrowser automation for hardcoded scenario
+## WebBrowser automation for a hardcoded (but parametrized) scenario
 
-Sometimes we need to conduct a scenario using webautomated browser. Actually when we have defined input and output of operationa, then challlenge is to automate web browser to obtain final values.
+Sometimes we need to conduct a scenario using automated web browser. Actually when we have defined input and output of operationa, then challlenge is to automate web browser to obtain final values.
 
-I would like to avoid using Selenium because it is error prone (according to my experience), but rather using [Puppeteer](https://github.com/puppeteer/puppeteer) which should be async, fast and - in my case - supported by using TypeScript.
+I would like to avoid using Selenium because it is error prone (according to my experience), but rather using [Puppeteer](https://github.com/puppeteer/puppeteer) which should be async, fast and - in my case - supported by TypeScript.
 
 My spike covers using [dockerized puppeter](https://github.com/ltwlf/azure-functions-docker-puppeteer)
 
 ## prerequisits
-- installed [azure function core tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#v2). I suggest version v2. It forces you to install nodejs version as well. In my case finally I had to add [extra switches](https://github.com/npm/npm/issues/17268#issuecomment-310167614)
+- installed [azure function core tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local). I use v2.  
+  In my case finally I had to add [extra switches](https://github.com/npm/npm/issues/17268#issuecomment-310167614)
 
 How to run the spike
 

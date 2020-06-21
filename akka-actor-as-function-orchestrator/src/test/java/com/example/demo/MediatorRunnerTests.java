@@ -1,26 +1,27 @@
 package com.example.demo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.time.Duration;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-
-import com.typesafe.config.ConfigFactory;
+import java.util.function.Consumer;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import akka.actor.testkit.typed.javadsl.ActorTestKit;
+import akka.actor.typed.ActorRef;
+import akka.actor.typed.Behavior;
+import akka.actor.typed.Signal;
+import akka.actor.typed.Terminated;
 import akka.actor.typed.javadsl.Behaviors;
 import lombok.SneakyThrows;
+import reactor.core.publisher.MonoProcessor;
 
-public final class SimpleMediatorRunnerTests {
+public final class MediatorRunnerTests {
 
     private ActorTestKit actorTestKit;
     private SimpleMediatorRunnerImpl runner;
@@ -76,10 +77,20 @@ public final class SimpleMediatorRunnerTests {
 
     @Test
     public void shouldTerminateSpawnedBehaviorAfterTimeout() {
-        var mediator = Behaviors.stopped();
+        MonoProcessor<Signal> cont = MonoProcessor.<Signal>create();
+        var mediator = Behaviors.<Object>setup(ctx -> {
+            return Behaviors.receiveSignal((ctx_, sig) -> {
+                cont.onNext(sig);
+                return Behaviors.empty();
+            });
+        });
         var ignoredMessage = new Object();
         runner.spawn(mediator, ignoredMessage, Duration.ZERO);
 
-        Assertions.assertThat(actorTestKit);
+        assertThat(cont
+            .timeout(Duration.ofMillis(300))
+            .blockOptional())
+            .isNotEmpty();
+            
     }
 }

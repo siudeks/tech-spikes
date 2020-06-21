@@ -18,6 +18,7 @@ import akka.actor.typed.Behavior;
 import akka.actor.typed.Terminated;
 import akka.actor.typed.javadsl.Behaviors;
 import lombok.SneakyThrows;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.MonoProcessor;
 
 public final class MyMediatorTests {
@@ -40,9 +41,8 @@ public final class MyMediatorTests {
         var beh = MyMediator.create(result, Duration.ZERO, nonRespondingService);
         var sut = testKit.spawn(beh);
 
-        var terminationSignal = new CompletableFuture<Boolean>()
-                                .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
-        testKit.spawn(TerminationWatcher.create(sut, terminationSignal::complete));
+        var terminationSignal = MonoProcessor.<Boolean>create();
+        testKit.spawn(TerminationWatcher.create(sut, terminationSignal::onNext));
 
 
         sut.tell(new MyMediator.Command.Verify("ignored", "ignored"));

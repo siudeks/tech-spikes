@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyController {
 
     @Autowired
-    private SimpleMediatorRunner runner;
+    private AsyncMediatorRunner runner;
 
     @GetMapping(path = "/")
     public CompletionStage<String> hello() {
@@ -23,7 +23,7 @@ public class MyController {
         var beh = MyMediator
             .create(result, Duration.ofSeconds(5), nonRespondingService);
 
-        runner.spawn(beh, new MyMediator.Command.Verify("some name", "some password"));
+        runner.spawn(beh, new MyMediator.Command.Verify("some name", "some password"), Duration.ofSeconds(30));
 
         return result
             .thenApply(it -> it.toString());

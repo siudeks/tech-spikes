@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.time.Duration;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -14,15 +15,21 @@ import lombok.Value;
 
 
 /** Allows to run given Behavior and send initial message. */
-public interface SimpleMediatorRunner {
-    <T> void spawn(Behavior<T> behaviorToSpawnAndRun, T initialMessage);
+public interface AsyncMediatorRunner {
+    <T> void spawn(Behavior<T> behaviorToSpawnAndRun, T initialMessage, Duration timeout);
 }
 
 @Component
-class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
+class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
 
-    /** The only one purpose of the Actor System is to run Mediators. */
-    private ActorSystem<CreateRequest<?>> actorSystem;
+    /**
+     * The only one purpose of the Actor System is to run Mediators.
+     * <p>
+     * actorSystem is not provide only to be used uin unit tests and it is not
+     * intended to be used outside of {@link SimpleMediatorRunnerImpl}.
+     */
+    
+    ActorSystem<CreateRequest<?>> actorSystem;
     
     public SimpleMediatorRunnerImpl() {
         var userGuardianBeh = Behaviors.<CreateRequest<?>> setup(ctx -> {
@@ -33,7 +40,7 @@ class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
 
     private Behavior<CreateRequest<?>> create(ActorContext<CreateRequest<?>> ctx, CreateRequest<?> msg) {
         var randomName = UUID.randomUUID().toString();
-        var mediator = ctx.spawn(msg.behavior, randomName);
+        var mediator = ctx.spawn(msg.initialBehavior, randomName);
         msg.continuation.accept(mediator);
         return Behaviors.same();
     }
@@ -45,18 +52,22 @@ class SimpleMediatorRunnerImpl implements SimpleMediatorRunner, AutoCloseable {
 
     @Value
     private class CreateRequest<T> {
-        private Behavior<T> behavior;
+        private Behavior<T> initialBehavior;
         private Consumer<ActorRef<?>> continuation;
     }
 
     @Override
-    public <T> void spawn(Behavior<T> behaviorToSpawn, T initialMessage) {
+    public <T> void spawn(final Behavior<T> behaviorToSpawn,
+                          final T initialMessage,
+                          final Duration timeout) {
+
+        
         Consumer<ActorRef<?>> kickStartBehavior = ar -> {
             @SuppressWarnings("unchecked")
             var typed = (ActorRef<T>) ar;
             typed.tell(initialMessage);
         };
-        
+
         var request = new CreateRequest<>(behaviorToSpawn, kickStartBehavior);
         actorSystem.tell(request);
     }

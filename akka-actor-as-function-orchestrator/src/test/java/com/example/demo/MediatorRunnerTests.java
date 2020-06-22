@@ -5,16 +5,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import akka.NotUsed;
+import akka.actor.testkit.typed.Effect.Stopped;
 import akka.actor.testkit.typed.javadsl.ActorTestKit;
+import akka.actor.typed.PostStop;
 import akka.actor.typed.Signal;
+import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 import lombok.SneakyThrows;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.MonoProcessor;
 
 public final class MediatorRunnerTests {
@@ -40,13 +46,11 @@ public final class MediatorRunnerTests {
         var touched = new CompletableFuture<Boolean>()
             .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
 
-        var simpleMediator = Behaviors.receiveMessage((Object ignored) -> {
+        var simpleMediator = Behaviors.setup(ctx -> {
             touched.complete(Boolean.TRUE);
             return Behaviors.stopped();
         });
-        var simpleMediatorInitialMessage = new Object();
-
-        runner.spawn(simpleMediator, simpleMediatorInitialMessage, Duration.ofSeconds(1));
+        runner.spawn(simpleMediator, () -> { }, Duration.ofSeconds(1));
 
         Assertions.assertThat(touched.get()).isTrue();
     }
@@ -59,34 +63,39 @@ public final class MediatorRunnerTests {
             .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
 
         var firstMediator = Behaviors.stopped();
-        var secondMediator = Behaviors.receiveMessage((Object ignored) -> {
+        var secondMediator = Behaviors.setup(ctx -> {
             touched.complete(Boolean.TRUE);
             return Behaviors.stopped();
         });
 
-        var ignoredMessage = new Object();
-        runner.spawn(firstMediator, ignoredMessage, Duration.ofSeconds(1));
-        runner.spawn(secondMediator, ignoredMessage, Duration.ofSeconds(1));
+        runner.spawn(firstMediator, () -> { }, Duration.ofSeconds(1));
+        runner.spawn(secondMediator, () -> { }, Duration.ofSeconds(1));
 
         Assertions.assertThat(touched.get()).isTrue();
     }
 
     @Test
     public void shouldTerminateSpawnedBehaviorAfterTimeout() {
-        MonoProcessor<Signal> cont = MonoProcessor.<Signal>create();
-        var mediator = Behaviors.<Object>setup(ctx -> {
-            return Behaviors.receiveSignal((ctx_, sig) -> {
-                cont.onNext(sig);
-                return Behaviors.empty();
-            });
+        
+        var actorKilled = MonoProcessor.<NotUsed>create();
+        var mediator = Behaviors.setup(ctx -> {
+            return Behaviors
+                .receive(Object.class)
+                .onSignal(PostStop.class, signal -> {
+                    actorKilled.onNext(NotUsed.getInstance());
+                    return Behaviors.stopped();} )
+                .build();
         });
-        var ignoredMessage = new Object();
-        runner.spawn(mediator, ignoredMessage, Duration.ZERO);
+                    
+        var terminationSignaled = MonoProcessor.<NotUsed>create();
+        runner.spawn(mediator,
+                     () -> terminationSignaled.onNext(NotUsed.getInstance()),
+                     Duration.ofSeconds(0));
 
-        assertThat(cont
+        assertThat(Mono
+            .zip(actorKilled, terminationSignaled)
             .timeout(Duration.ofMillis(300))
             .blockOptional())
             .isNotEmpty();
-            
     }
 }

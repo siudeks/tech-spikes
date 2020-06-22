@@ -19,6 +19,13 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>1.0.0-alpha-3</version>
+		</dependency>
+
+
    		<dependency>
       		<groupId>com.typesafe.akka</groupId>
       		<artifactId>akka-actor-typed_2.13</artifactId>

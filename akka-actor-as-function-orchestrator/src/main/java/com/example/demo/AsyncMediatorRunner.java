@@ -8,14 +8,18 @@ import org.springframework.stereotype.Component;
 import akka.NotUsed;
 import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
+import akka.actor.typed.javadsl.Receive;
 import akka.actor.typed.javadsl.TimerScheduler;
 import lombok.Value;
 
 /** Allows to run given Behavior and send initial message. */
+@FunctionalInterface
 public interface AsyncMediatorRunner {
-    <T> void spawn(Behavior<T> behaviorToSpawnAndRun, T initialMessage, Duration timeout);
+    
+    void spawn(Behavior<?> behaviorToSpawnAndRun, Runnable timeoutHandler, Duration timeout);
 }
 
 @Component
@@ -54,21 +58,60 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
     }
 
     @Override
-    public <T> void spawn(final Behavior<T> behaviorToSpawn,
-                          final T initialMessage,
-                          final Duration timeout) {
+    public void spawn(final Behavior<?> behaviorToSpawn,
+                      final Runnable timeoutHandler,
+                      final Duration timeout) {
 
-        var parent = Behaviors.<NotUsed>setup(context -> {
-            var inner = context.spawn(behaviorToSpawn, UUID.randomUUID().toString());
-            inner.tell(initialMessage);
-            return Behaviors.withTimers(SimpleMediatorRunnerImpl::stopAfterTimeout);
-        });
-
-        var request = new CreateRequest<>(parent);
+        var request = new CreateRequest<>(SpawnBehavior.create(behaviorToSpawn, timeoutHandler, timeout));
         actorSystem.tell(request);
     }
+}
 
-    private static Behavior<NotUsed> stopAfterTimeout(final TimerScheduler<NotUsed> msg) {
+
+final class SpawnBehavior extends AbstractBehavior<NotUsed> {
+
+    private Duration timeout;
+    private Runnable timeoutHandler;
+    private SpawnBehavior(final ActorContext<NotUsed> ctx,
+                          final Behavior<?> behaviorToSpawn,
+                          final Runnable timeoutHandler,
+                          final Duration timeout) {
+        super(ctx);
+
+        this.timeout = timeout;
+        this.timeoutHandler = timeoutHandler;
+        ctx.spawn(behaviorToSpawn, UUID.randomUUID().toString());
+        ctx.getSelf().tell(NotUsed.getInstance());
+    }
+
+    static Behavior<NotUsed> create(final Behavior<?> behaviorToSpawn,
+                                    final Runnable timeoutHandler,
+                                    final Duration timeout) {
+        return Behaviors.setup(ctx -> new SpawnBehavior(ctx,
+                                                        behaviorToSpawn,
+                                                        timeoutHandler,
+                                                        timeout));
+    }
+
+    @Override
+    public Receive<NotUsed> createReceive() {
+        return newReceiveBuilder()
+            .onMessage(NotUsed.class, this::start)
+            .build();
+    }
+
+    private Behavior<NotUsed> start(final NotUsed ignored) {
+        return Behaviors.withTimers(this::stopAfterTimeout);
+    }
+
+    private Behavior<NotUsed> stopAfterTimeout(final TimerScheduler<NotUsed> timers) {
+        timers.startSingleTimer(NotUsed.getInstance(), timeout);
+        return Behaviors.receiveMessage(this::onTimeout);
+    }
+
+    private Behavior<NotUsed> onTimeout(final NotUsed ignored) {
+        timeoutHandler.run();
         return Behaviors.stopped();
     }
 }
+

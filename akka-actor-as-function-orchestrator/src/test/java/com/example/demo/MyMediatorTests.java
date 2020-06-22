@@ -2,23 +2,18 @@ package com.example.demo;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.reactivestreams.Subscriber;
 
-import akka.NotUsed;
 import akka.actor.testkit.typed.javadsl.ActorTestKit;
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.Terminated;
 import akka.actor.typed.javadsl.Behaviors;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 import reactor.core.publisher.MonoProcessor;
 
 public final class MyMediatorTests {

@@ -2,17 +2,16 @@ package com.example.demo;
 
 import java.time.Duration;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import org.springframework.stereotype.Component;
 
-import akka.actor.typed.ActorRef;
+import akka.NotUsed;
 import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
+import akka.actor.typed.javadsl.TimerScheduler;
 import lombok.Value;
-
 
 /** Allows to run given Behavior and send initial message. */
 public interface AsyncMediatorRunner {
@@ -28,11 +27,11 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
      * actorSystem is not provide only to be used uin unit tests and it is not
      * intended to be used outside of {@link SimpleMediatorRunnerImpl}.
      */
-    
+
     ActorSystem<CreateRequest<?>> actorSystem;
-    
+
     public SimpleMediatorRunnerImpl() {
-        var userGuardianBeh = Behaviors.<CreateRequest<?>> setup(ctx -> {
+        var userGuardianBeh = Behaviors.<CreateRequest<?>>setup(ctx -> {
             return Behaviors.receiveMessage(msg -> this.create(ctx, msg));
         });
         actorSystem = ActorSystem.create(userGuardianBeh, "mediators");
@@ -40,8 +39,7 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
 
     private Behavior<CreateRequest<?>> create(ActorContext<CreateRequest<?>> ctx, CreateRequest<?> msg) {
         var randomName = UUID.randomUUID().toString();
-        var mediator = ctx.spawn(msg.initialBehavior, randomName);
-        msg.continuation.accept(mediator);
+        ctx.spawn(msg.initialBehavior, randomName);
         return Behaviors.same();
     }
 
@@ -53,7 +51,6 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
     @Value
     private class CreateRequest<T> {
         private Behavior<T> initialBehavior;
-        private Consumer<ActorRef<?>> continuation;
     }
 
     @Override
@@ -61,15 +58,17 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
                           final T initialMessage,
                           final Duration timeout) {
 
-        
-        Consumer<ActorRef<?>> kickStartBehavior = ar -> {
-            @SuppressWarnings("unchecked")
-            var typed = (ActorRef<T>) ar;
-            typed.tell(initialMessage);
-        };
+        var parent = Behaviors.<NotUsed>setup(context -> {
+            var inner = context.spawn(behaviorToSpawn, UUID.randomUUID().toString());
+            inner.tell(initialMessage);
+            return Behaviors.withTimers(SimpleMediatorRunnerImpl::stopAfterTimeout);
+        });
 
-        var request = new CreateRequest<>(behaviorToSpawn, kickStartBehavior);
+        var request = new CreateRequest<>(parent);
         actorSystem.tell(request);
     }
-}
 
+    private static Behavior<NotUsed> stopAfterTimeout(final TimerScheduler<NotUsed> msg) {
+        return Behaviors.stopped();
+    }
+}

@@ -40,7 +40,6 @@ public final class MediatorRunnerTests {
     }
 
     @Test
-    @SneakyThrows
     public void shouldRunSimpleBehavior() {
         
         var touched = new CompletableFuture<Boolean>()
@@ -52,11 +51,10 @@ public final class MediatorRunnerTests {
         });
         runner.spawn(simpleMediator, () -> { }, Duration.ofSeconds(1));
 
-        Assertions.assertThat(touched.get()).isTrue();
+        Assertions.assertThat(touched.join()).isTrue();
     }
 
     @Test
-    @SneakyThrows
     public void shouldRunSimpleSecondBehavior() {
         
         var touched = new CompletableFuture<Boolean>()
@@ -71,7 +69,7 @@ public final class MediatorRunnerTests {
         runner.spawn(firstMediator, () -> { }, Duration.ofSeconds(1));
         runner.spawn(secondMediator, () -> { }, Duration.ofSeconds(1));
 
-        Assertions.assertThat(touched.get()).isTrue();
+        Assertions.assertThat(touched.join()).isTrue();
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import akka.NotUsed;
 import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.Terminated;
 import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
@@ -80,7 +81,9 @@ final class SpawnBehavior extends AbstractBehavior<NotUsed> {
 
         this.timeout = timeout;
         this.timeoutHandler = timeoutHandler;
-        ctx.spawn(behaviorToSpawn, UUID.randomUUID().toString());
+        
+        var watched = ctx.spawn(behaviorToSpawn, UUID.randomUUID().toString());
+        ctx.watch(watched);
         ctx.getSelf().tell(NotUsed.getInstance());
     }
 
@@ -97,6 +100,7 @@ final class SpawnBehavior extends AbstractBehavior<NotUsed> {
     public Receive<NotUsed> createReceive() {
         return newReceiveBuilder()
             .onMessage(NotUsed.class, this::start)
+            .onSignal(Terminated.class, this::whenWatchedTerminated)
             .build();
     }
 
@@ -106,11 +110,22 @@ final class SpawnBehavior extends AbstractBehavior<NotUsed> {
 
     private Behavior<NotUsed> stopAfterTimeout(final TimerScheduler<NotUsed> timers) {
         timers.startSingleTimer(NotUsed.getInstance(), timeout);
-        return Behaviors.receiveMessage(this::onTimeout);
+        return Behaviors
+            .receive(NotUsed.class)
+            .onMessage(NotUsed.class, this::onTimeout)
+            .onSignal(Terminated.class, this::whenWatchedTerminated)
+            .build();
     }
 
     private Behavior<NotUsed> onTimeout(final NotUsed ignored) {
         timeoutHandler.run();
+        return Behaviors.stopped();
+    }
+
+    // the only one case when 'Terminated' signal can be invoked is when
+    // watched behavior has been finished on time (properly)
+    // so that the guard is ready to finish work without informing about timeout.
+    private Behavior<NotUsed> whenWatchedTerminated(Terminated signal) {
         return Behaviors.stopped();
     }
 }

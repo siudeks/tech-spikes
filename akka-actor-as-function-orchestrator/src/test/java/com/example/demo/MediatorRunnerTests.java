@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -13,13 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import akka.NotUsed;
-import akka.actor.testkit.typed.Effect.Stopped;
 import akka.actor.testkit.typed.javadsl.ActorTestKit;
 import akka.actor.typed.PostStop;
-import akka.actor.typed.Signal;
-import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
-import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.MonoProcessor;
 

@@ -98,4 +98,17 @@ public final class MediatorRunnerTests {
             .blockOptional())
             .isNotEmpty();
     }
+
+    @Test
+    public void shouldNotNotifyWhenNotTimeouted() {
+        var terminationSignaled = MonoProcessor.<NotUsed>create();
+        runner.spawn(Behaviors.stopped(),
+                     () -> terminationSignaled.onNext(NotUsed.getInstance()),
+                     Duration.ofSeconds(0));
+
+        assertThat(terminationSignaled
+            .timeout(Duration.ofMillis(300))
+            .blockOptional())
+            .isEmpty();
+    }
 }

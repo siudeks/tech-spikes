@@ -16,7 +16,7 @@ import akka.actor.typed.javadsl.Receive;
 import akka.actor.typed.javadsl.TimerScheduler;
 import lombok.Value;
 
-/** Allows to run given Behavior and send initial message. */
+/** Allows to spawn given Behavior and send initial message. */
 @FunctionalInterface
 public interface AsyncMediatorRunner {
     
@@ -24,18 +24,18 @@ public interface AsyncMediatorRunner {
 }
 
 @Component
-class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
+class AsyncMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
 
     /**
      * The only one purpose of the Actor System is to run Mediators.
      * <p>
      * actorSystem is not provide only to be used uin unit tests and it is not
-     * intended to be used outside of {@link SimpleMediatorRunnerImpl}.
+     * intended to be used outside of {@link AsyncMediatorRunnerImpl}.
      */
 
     ActorSystem<CreateRequest<?>> actorSystem;
 
-    public SimpleMediatorRunnerImpl() {
+    public AsyncMediatorRunnerImpl() {
         var userGuardianBeh = Behaviors.<CreateRequest<?>>setup(ctx -> {
             return Behaviors.receiveMessage(msg -> this.create(ctx, msg));
         });
@@ -43,8 +43,7 @@ class SimpleMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
     }
 
     private Behavior<CreateRequest<?>> create(ActorContext<CreateRequest<?>> ctx, CreateRequest<?> msg) {
-        var randomName = UUID.randomUUID().toString();
-        ctx.spawn(msg.initialBehavior, randomName);
+        ctx.spawnAnonymous(msg.initialBehavior);
         return Behaviors.same();
     }
 

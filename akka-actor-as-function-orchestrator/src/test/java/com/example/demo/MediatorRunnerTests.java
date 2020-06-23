@@ -37,12 +37,12 @@ public final class MediatorRunnerTests {
     @Test
     public void shouldTerminateSpawnedBehaviorAfterTimeout() {
         
-        var isActorKilled = MonoProcessor.<NotUsed>create();
-        var sut = Behaviors.setup(ctx -> {
+        var postStopSignaled = MonoProcessor.<NotUsed>create();
+        var sut = Behaviors.<NotUsed>setup(ctx -> {
             return Behaviors
-                .receive(Object.class)
+                .receive(NotUsed.class)
                 .onSignal(PostStop.class, signal -> {
-                    isActorKilled.onNext(NotUsed.getInstance());
+                    postStopSignaled.onNext(NotUsed.getInstance());
                     return Behaviors.stopped();} )
                 .build();
         });
@@ -53,7 +53,7 @@ public final class MediatorRunnerTests {
                      Duration.ofSeconds(0));
 
         assertThat(Mono
-            .zip(isActorKilled, terminationSignaled)
+            .zip(postStopSignaled, terminationSignaled)
             .timeout(Duration.ofMillis(300))
             .blockOptional())
             .isNotEmpty();

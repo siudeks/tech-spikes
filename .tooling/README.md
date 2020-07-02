@@ -16,3 +16,4 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - install [node 12 with npm](https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/)
 - [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt)
 - [Install Terraform on WSL2](https://techcommunity.microsoft.com/t5/Azure-Developer-Community-Blog/Configuring-Terraform-on-Windows-10-Linux-Sub-System/ba-p/393845)
+- [Install Docker on WSL2](https://dev.to/bartr/install-docker-on-windows-subsystem-for-linux-v2-ubuntu-5dl7)

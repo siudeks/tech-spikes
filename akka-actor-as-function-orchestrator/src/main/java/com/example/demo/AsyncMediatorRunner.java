@@ -18,24 +18,24 @@ import lombok.Value;
 
 /** Allows to spawn given Behavior and send initial message. */
 @FunctionalInterface
-public interface AsyncMediatorRunner {
+public interface BehSupport {
     
     void spawn(Behavior<?> behaviorToSpawnAndRun, Runnable timeoutHandler, Duration timeout);
 }
 
 @Component
-class AsyncMediatorRunnerImpl implements AsyncMediatorRunner, AutoCloseable {
+class BehSupportImpl implements BehSupport, AutoCloseable {
 
     /**
      * The only one purpose of the Actor System is to run Mediators.
      * <p>
      * actorSystem is not provide only to be used uin unit tests and it is not
-     * intended to be used outside of {@link AsyncMediatorRunnerImpl}.
+     * intended to be used outside of {@link BehSupportImpl}.
      */
 
     ActorSystem<CreateRequest<?>> actorSystem;
 
-    public AsyncMediatorRunnerImpl() {
+    public BehSupportImpl() {
         var userGuardianBeh = Behaviors.<CreateRequest<?>>setup(ctx -> {
             return Behaviors.receiveMessage(msg -> this.create(ctx, msg));
         });

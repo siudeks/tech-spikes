@@ -17,7 +17,7 @@ import reactor.core.publisher.MonoProcessor;
 
 public final class MediatorRunnerTests {
 
-    private AsyncMediatorRunnerImpl runner = new AsyncMediatorRunnerImpl();
+    private BehSupportImpl runner = new BehSupportImpl();
 
     @Test
     public void shouldSpawnSimpleBehavior() {

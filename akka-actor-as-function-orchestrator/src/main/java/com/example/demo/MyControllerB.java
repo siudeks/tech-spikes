@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 public class MyControllerB {
 
     @Autowired
-    private AsyncMediatorRunner runner;
+    private BehSupport runner;
 
     @GetMapping(path = "/b1")
     public CompletionStage<String> hello1() {

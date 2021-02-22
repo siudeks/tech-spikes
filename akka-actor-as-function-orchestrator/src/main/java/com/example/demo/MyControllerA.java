@@ -14,7 +14,7 @@ import akka.actor.typed.scaladsl.Behaviors;
 public class MyControllerA {
 
     @Autowired
-    private AsyncMediatorRunner runner;
+    private BehSupport runner;
 
     @GetMapping(path = "/a")
     public CompletionStage<String> hello() {

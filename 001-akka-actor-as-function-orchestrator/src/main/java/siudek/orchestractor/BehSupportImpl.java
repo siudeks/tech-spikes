@@ -16,8 +16,8 @@ class BehSupportImpl implements BehSupport, AutoCloseable {
   /**
    * The only one purpose of the Actor System is to run Mediators.
    *
-   * <p>actorSystem is not provide only to be used uin unit tests and it is not
-   * intended to be used outside of {@link BehSupportImpl}.
+   * <p>The actorSystem is not intended to be used outside of {@link BehSupportImpl} because
+   * BehSupport is designed to work in absence of actor-based solution.
    */
   ActorSystem<CreateRequest<?>> actorSystem;
 

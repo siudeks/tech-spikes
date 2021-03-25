@@ -7,7 +7,7 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 001-akka-actor-as-function-orchestrator/**/*.*
+    - '001-akka-actor-as-function-orchestrator/**'
 
 defaults:
   run:

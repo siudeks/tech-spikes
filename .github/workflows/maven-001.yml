@@ -8,6 +8,7 @@ on:
     branches: [ master ]
     paths:
     - '001-akka-actor-as-function-orchestrator/**'
+    - '.github/workflows/maven-001.yml'
 
 defaults:
   run:

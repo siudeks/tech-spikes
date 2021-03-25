@@ -1,4 +1,4 @@
-package com.example.demo;
+package siudek.example1.orchestractor;
 
 import java.time.Duration;
 
@@ -12,6 +12,6 @@ import akka.actor.typed.Behavior;
 @FunctionalInterface
 public interface BehSupport {
     
-    void spawn(Behavior<?> behaviorToSpawnAndRun, Runnable timeoutHandler, Duration timeout);
+  void spawn(Behavior<?> behaviorToSpawnAndRun, Runnable timeoutHandler, Duration timeout);
 }
 

@@ -1,4 +1,4 @@
-package com.example.demo;
+package siudek.example1;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;

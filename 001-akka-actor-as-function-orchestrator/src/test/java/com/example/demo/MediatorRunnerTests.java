@@ -13,7 +13,8 @@ import akka.NotUsed;
 import akka.actor.typed.PostStop;
 import akka.actor.typed.javadsl.Behaviors;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.MonoProcessor;
+import reactor.core.publisher.MonoSink;
+import reactor.core.publisher.Sinks;
 
 public final class MediatorRunnerTests {
 
@@ -36,24 +37,23 @@ public final class MediatorRunnerTests {
 
     @Test
     public void shouldTerminateSpawnedBehaviorAfterTimeout() {
-        
-        var postStopSignaled = MonoProcessor.<NotUsed>create();
+        var postStopSignaled = Sinks.one();
         var sut = Behaviors.<NotUsed>setup(ctx -> {
             return Behaviors
                 .receive(NotUsed.class)
                 .onSignal(PostStop.class, signal -> {
-                    postStopSignaled.onNext(NotUsed.getInstance());
+                    postStopSignaled.tryEmitValue(NotUsed.getInstance());
                     return Behaviors.stopped();} )
                 .build();
         });
                     
-        var terminationSignaled = MonoProcessor.<NotUsed>create();
+        var terminationSignaled = Sinks.<NotUsed>one();
         runner.spawn(sut,
-                     () -> terminationSignaled.onNext(NotUsed.getInstance()),
+                     () -> terminationSignaled.tryEmitValue(NotUsed.getInstance()),
                      Duration.ofSeconds(0));
 
         assertThat(Mono
-            .zip(postStopSignaled, terminationSignaled)
+            .zip(postStopSignaled.asMono(), terminationSignaled.asMono())
             .timeout(Duration.ofMillis(300))
             .blockOptional())
             .isNotEmpty();
@@ -61,12 +61,12 @@ public final class MediatorRunnerTests {
 
     @Test
     public void shouldNotNotifyWhenNotTimeouted() {
-        var terminationSignaled = MonoProcessor.<Boolean>create();
+        var terminationSignaled = Sinks.<Boolean>one();
         runner.spawn(Behaviors.stopped(),
-                     () -> terminationSignaled.onNext(true),
+                     () -> terminationSignaled.tryEmitValue(true),
                      Duration.ofMillis(300));
 
-        assertThat(terminationSignaled
+        assertThat(terminationSignaled.asMono()
             .timeout(Duration.ofMillis(300), Mono.just(false))
             .blockOptional())
             .hasValue(false);

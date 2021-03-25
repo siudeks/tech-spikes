@@ -79,6 +79,21 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<release>11</release>
+						<showWarnings>true</showWarnings>
+						<compilerArgs>
+							<!-- https://github.com/spring-projects/spring-boot/issues/6421#issuecomment-273907960 -->
+							<arg>-Xlint:all</arg>
+							<arg>-Xlint:-processing</arg>
+							<arg>-Werror</arg>
+						</compilerArgs>
+					</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

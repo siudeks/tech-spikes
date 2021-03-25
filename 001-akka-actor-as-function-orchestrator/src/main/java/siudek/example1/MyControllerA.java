@@ -41,6 +41,6 @@ public class MyControllerA {
     runner.spawn(emptyBehavior, () -> result.complete("empty!"), Duration.ofSeconds(5));
 
     return result
-        .thenApply(it -> it.toString());
+        .thenApply(Object::toString);
   }
 }

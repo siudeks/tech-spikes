@@ -6,10 +6,12 @@ name: Java CI with Maven
 on:
   push:
     branches: [ master ]
-    paths: 001-akka-actor-as-function-orchestrator
+    paths:
+    - 001-akka-actor-as-function-orchestrator
   pull_request:
     branches: [ master ]
-    paths: 001-akka-actor-as-function-orchestrator
+    paths:
+    - 001-akka-actor-as-function-orchestrator
 
 jobs:
   build:

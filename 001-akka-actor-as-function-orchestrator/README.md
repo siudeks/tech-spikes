@@ -1,3 +1,5 @@
 # Actor as a Mediator
 
-Let's assume we have an Actor, which has to coordinate external asynchronous services / streams. The actor has a few Benaviors, used to distinguish 
+Code for article on Medium.com
+
+[![Java CI with Maven](https://github.com/siudeks/tech-spikes/actions/workflows/maven-001.yml/badge.svg)](https://github.com/siudeks/tech-spikes/actions/workflows/maven-001.yml)

@@ -7,24 +7,24 @@ import lombok.Value;
 
 public abstract class VerificationService {
 
-    public interface Do extends Function<Claims, CompletionStage<Result>> {
+  public interface Do extends Function<Claims, CompletionStage<Result>> {
 
-    }
+  }
 
-    @Value
-    public class Claims {
-        private String name;
-        private String password;
-    }
+  @Value
+  public class Claims {
+    private String name;
+    private String password;
+  }
 
-    public interface Result {
-    }
+  public interface Result {
+  }
 
-    @Value
-    public static class Valid implements Result {
-    }
+  @Value
+  public static class Valid implements Result {
+  }
 
-    @Value
-    public static class Invalid implements Result {
-    }
+  @Value
+  public static class Invalid implements Result {
+  }
 }

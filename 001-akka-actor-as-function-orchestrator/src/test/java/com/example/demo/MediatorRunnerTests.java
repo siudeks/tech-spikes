@@ -13,7 +13,6 @@ import akka.NotUsed;
 import akka.actor.typed.PostStop;
 import akka.actor.typed.javadsl.Behaviors;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.MonoSink;
 import reactor.core.publisher.Sinks;
 
 public final class MediatorRunnerTests {

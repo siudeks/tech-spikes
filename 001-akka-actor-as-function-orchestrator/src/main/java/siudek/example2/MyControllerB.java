@@ -1,4 +1,4 @@
-package com.example.demo;
+package siudek.example2;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -16,6 +16,7 @@ import akka.actor.typed.javadsl.Receive;
 import io.vavr.Function0;
 import lombok.Value;
 import reactor.core.publisher.Mono;
+import siudek.orchestractor.BehSupport;
 
 @RestController
 public class MyControllerB {

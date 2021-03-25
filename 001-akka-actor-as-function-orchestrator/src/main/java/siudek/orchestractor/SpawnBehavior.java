@@ -1,4 +1,4 @@
-package siudek.example1.orchestractor;
+package siudek.orchestractor;
 
 import java.time.Duration;
 import java.util.UUID;

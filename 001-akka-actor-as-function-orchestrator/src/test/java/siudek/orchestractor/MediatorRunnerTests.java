@@ -1,4 +1,4 @@
-package com.example.demo;
+package siudek.orchestractor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

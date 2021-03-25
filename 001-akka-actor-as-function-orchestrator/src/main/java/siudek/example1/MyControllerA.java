@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import akka.actor.typed.scaladsl.Behaviors;
+import siudek.orchestractor.BehSupport;
 
 /**
  * Example http controller to show timeout on {@code BehSupport}.

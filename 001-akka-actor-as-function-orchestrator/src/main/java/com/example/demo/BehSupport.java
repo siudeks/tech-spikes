@@ -17,8 +17,9 @@ import akka.actor.typed.javadsl.TimerScheduler;
 import lombok.Value;
 
 /**
- * Allows to spawn given Behavior and send initial message.
- * If the actor will not stop working after <code>timeout<code>, <code>timeoutHandler> will be informed.
+ * Allows to spawn given Behavior and send an initial message.
+ *
+ * If the actor will not stop working after <code>timeout</code>, <code>timeoutHandler</code> will be informed.
  */
 @FunctionalInterface
 public interface BehSupport {

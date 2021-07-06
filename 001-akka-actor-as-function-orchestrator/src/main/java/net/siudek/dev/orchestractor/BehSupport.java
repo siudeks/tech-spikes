@@ -1,4 +1,4 @@
-package siudek.orchestractor;
+package net.siudek.dev.orchestractor;
 
 import java.time.Duration;
 

@@ -1,4 +1,4 @@
-package siudek.orchestractor;
+package net.siudek.dev.orchestractor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,11 +23,10 @@ import reactor.core.publisher.Sinks;
  */
 public final class MediatorRunnerTests {
 
-  private BehSupportImpl runner = new BehSupportImpl();
+  // system under test (hereafter: sut)
+  private BehSupportImpl sut = new BehSupportImpl();
 
-  /**
-   * A simple behavior should be started by BehSupport
-   */
+  /** A simple behavior should be started by BehSupport. */
   @Test
   public void shouldRunSimpleBehavior() {
 
@@ -38,15 +37,18 @@ public final class MediatorRunnerTests {
       touched.complete(Boolean.TRUE);
       return Behaviors.stopped();
     });
-    runner.run(simpleBeh, () -> { }, Duration.ofSeconds(1));
+    var emptyTimoutHandler = (Runnable) () -> { };
+    var timeoutLongEnouthToRunSimpleLogic = Duration.ofSeconds(1);
+    sut.run(simpleBeh, emptyTimoutHandler, timeoutLongEnouthToRunSimpleLogic);
 
     Assertions.assertThat(touched.join()).isTrue();
   }
 
+  /** A simple behavior should be terminated and timeout handler shoudl be invoked. */
   @Test
   public void shouldTerminateBehaviorAfterTimeout() {
     var postStopSignaled = Sinks.one();
-    var sut = Behaviors.<NotUsed>setup(ctx -> {
+    var myBehavior = Behaviors.<NotUsed>setup(ctx -> {
       return Behaviors
         .receive(NotUsed.class)
         .onSignal(PostStop.class, signal -> {
@@ -57,9 +59,9 @@ public final class MediatorRunnerTests {
     });
                     
     var terminationSignaled = Sinks.<NotUsed>one();
-    runner.run(sut,
-                 () -> terminationSignaled.tryEmitValue(NotUsed.getInstance()),
-                 Duration.ofSeconds(0));
+    sut.run(myBehavior,
+            () -> terminationSignaled.tryEmitValue(NotUsed.getInstance()),
+            Duration.ofSeconds(0));
 
     assertThat(Mono
       .zip(postStopSignaled.asMono(), terminationSignaled.asMono())
@@ -71,7 +73,7 @@ public final class MediatorRunnerTests {
   @Test
   public void shouldNotNotifyWhenNotTimeouted() {
     var terminationSignaled = Sinks.<Boolean>one();
-    runner.run(Behaviors.stopped(),
+    sut.run(Behaviors.stopped(),
                 () -> terminationSignaled.tryEmitValue(true),
                 Duration.ofMillis(300));
 

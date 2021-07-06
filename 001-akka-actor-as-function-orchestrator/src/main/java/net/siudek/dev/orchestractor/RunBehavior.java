@@ -1,4 +1,4 @@
-package siudek.orchestractor;
+package net.siudek.dev.orchestractor;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -12,7 +12,7 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 import akka.actor.typed.javadsl.TimerScheduler;
 
-class RunBehavior extends AbstractBehavior<NotUsed> {
+final class RunBehavior extends AbstractBehavior<NotUsed> {
 
   private Duration timeout;
   private Runnable timeoutHandler;

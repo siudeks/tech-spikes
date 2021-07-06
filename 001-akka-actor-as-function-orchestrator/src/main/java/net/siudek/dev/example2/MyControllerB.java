@@ -1,4 +1,4 @@
-package siudek.example2;
+package net.siudek.dev.example2;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.vavr.Function0;
+import net.siudek.dev.orchestractor.BehSupport;
 import reactor.core.publisher.Mono;
-import siudek.orchestractor.BehSupport;
 
 /** TBD. */
 @RestController

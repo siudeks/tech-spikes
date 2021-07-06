@@ -1,4 +1,4 @@
-package siudek.example2;
+package net.siudek.dev.example2;
 
 import java.util.concurrent.CompletableFuture;
 

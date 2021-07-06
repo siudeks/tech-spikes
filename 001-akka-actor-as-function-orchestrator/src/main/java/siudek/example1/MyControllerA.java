@@ -23,7 +23,7 @@ import siudek.orchestractor.BehSupport;
  * <li>see 'empty!' response
  * </ul>
  *
- * <p>What happens? The controller uses {@see BehSupport} to spawn an empty behavior.
+ * <p>What happens? The controller uses {@see BehSupport} to run an empty behavior.
  * Because the behavior is 'never ending', TBD 
  */
 @RestController
@@ -38,7 +38,7 @@ public class MyControllerA {
 
     var result = new CompletableFuture<String>();
     var emptyBehavior = Behaviors.empty();
-    runner.spawn(emptyBehavior, () -> result.complete("empty!"), Duration.ofSeconds(5));
+    runner.run(emptyBehavior, () -> result.complete("empty!"), Duration.ofSeconds(5));
 
     return result
         .thenApply(Object::toString);

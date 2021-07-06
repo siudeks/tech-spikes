@@ -12,12 +12,12 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 import akka.actor.typed.javadsl.TimerScheduler;
 
-class SpawnBehavior extends AbstractBehavior<NotUsed> {
+class RunBehavior extends AbstractBehavior<NotUsed> {
 
   private Duration timeout;
   private Runnable timeoutHandler;
 
-  private SpawnBehavior(final ActorContext<NotUsed> ctx,
+  private RunBehavior(final ActorContext<NotUsed> ctx,
                         final Behavior<?> behaviorToSpawn,
                         final Runnable timeoutHandler,
                         final Duration timeout) {
@@ -34,7 +34,7 @@ class SpawnBehavior extends AbstractBehavior<NotUsed> {
   static Behavior<NotUsed> create(final Behavior<?> behaviorToSpawn,
                                   final Runnable timeoutHandler,
                                   final Duration timeout) {
-    return Behaviors.setup(ctx -> new SpawnBehavior(ctx,
+    return Behaviors.setup(ctx -> new RunBehavior(ctx,
                                                     behaviorToSpawn,
                                                      timeoutHandler,
                                                      timeout));

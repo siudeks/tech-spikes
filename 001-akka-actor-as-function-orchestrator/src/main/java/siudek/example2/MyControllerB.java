@@ -27,7 +27,7 @@ public class MyControllerB {
         
     var service = Function0.of(() -> Mono.just(42).delayElement(Duration.ofSeconds(3)).toFuture());
 
-    runner.spawn(MyBehaviorB.create(result, service), () -> {
+    runner.run(MyBehaviorB.create(result, service), () -> {
       result.complete("empty!");
     }, Duration.ofSeconds(5));
 
@@ -42,7 +42,7 @@ public class MyControllerB {
         
     var service = Function0.of(() -> CompletableFuture.<Integer>failedFuture(new UnsupportedOperationException()));
 
-    runner.spawn(MyBehaviorB.create(result, service), () -> {
+    runner.run(MyBehaviorB.create(result, service), () -> {
       result.complete("empty!");
     }, Duration.ofSeconds(5));
 

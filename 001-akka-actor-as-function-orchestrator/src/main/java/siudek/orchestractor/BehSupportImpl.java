@@ -44,11 +44,11 @@ class BehSupportImpl implements BehSupport, AutoCloseable {
   }
 
   @Override
-  public void spawn(Behavior<?> behaviorToSpawn,
-                    Runnable timeoutHandler,
-                    Duration timeout) {
+  public void run(Behavior<?> behaviorToRun,
+                  Runnable timeoutHandler,
+                  Duration timeout) {
 
-    var request = new CreateRequest<>(SpawnBehavior.create(behaviorToSpawn, timeoutHandler, timeout));
+    var request = new CreateRequest<>(RunBehavior.create(behaviorToRun, timeoutHandler, timeout));
     actorSystem.tell(request);
   }
 }

@@ -15,28 +15,36 @@ import akka.actor.typed.javadsl.Behaviors;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-/** TBD. */
+/**
+ * When using short-living actors designed to handle a single request and produce single response
+ * as the result of more internal async operations, we would like to simplify as much as possible
+ * - starting such actors in a simple way, and
+ * - avoiding memory leak (in case of someone who forgot to destroy the actor after all)
+ */
 public final class MediatorRunnerTests {
 
   private BehSupportImpl runner = new BehSupportImpl();
 
+  /**
+   * A simple behavior should be started by BehSupport
+   */
   @Test
-  public void shouldSpawnSimpleBehavior() {
-       
+  public void shouldRunSimpleBehavior() {
+
     var touched = new CompletableFuture<Boolean>()
         .completeOnTimeout(Boolean.FALSE, 100, TimeUnit.MILLISECONDS);
 
-    var sut = Behaviors.setup(ctx -> {
+    var simpleBeh = Behaviors.setup(ctx -> {
       touched.complete(Boolean.TRUE);
       return Behaviors.stopped();
     });
-    runner.spawn(sut, () -> { }, Duration.ofSeconds(1));
+    runner.run(simpleBeh, () -> { }, Duration.ofSeconds(1));
 
     Assertions.assertThat(touched.join()).isTrue();
   }
 
   @Test
-  public void shouldTerminateSpawnedBehaviorAfterTimeout() {
+  public void shouldTerminateBehaviorAfterTimeout() {
     var postStopSignaled = Sinks.one();
     var sut = Behaviors.<NotUsed>setup(ctx -> {
       return Behaviors
@@ -49,7 +57,7 @@ public final class MediatorRunnerTests {
     });
                     
     var terminationSignaled = Sinks.<NotUsed>one();
-    runner.spawn(sut,
+    runner.run(sut,
                  () -> terminationSignaled.tryEmitValue(NotUsed.getInstance()),
                  Duration.ofSeconds(0));
 
@@ -63,7 +71,7 @@ public final class MediatorRunnerTests {
   @Test
   public void shouldNotNotifyWhenNotTimeouted() {
     var terminationSignaled = Sinks.<Boolean>one();
-    runner.spawn(Behaviors.stopped(),
+    runner.run(Behaviors.stopped(),
                 () -> terminationSignaled.tryEmitValue(true),
                 Duration.ofMillis(300));
 

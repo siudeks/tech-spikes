@@ -6,6 +6,6 @@ actor VerificationService
 
 autonumber
 == Claim Verification (?)==
-MyFunctionActor -> VerificationService : Verify a Claim
+MyFunctionActor -> VerificationService : Verify a Claim (2)
 VerificationService --> MyFunctionActor : The Claim in Invalid
 @enduml

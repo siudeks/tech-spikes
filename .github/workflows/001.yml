@@ -29,5 +29,8 @@ jobs:
       run: mvn -B --no-transfer-progress package --file pom.xml
     - name: Generate Plantuml
       uses: grassedge/generate-plantuml-action@v1.5
+      with:
+        path: 001-akka-actor-as-function-orchestrator
+        message: "Render PlantUML files"
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_FOR_PLANTUML }}

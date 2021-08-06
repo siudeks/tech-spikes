@@ -1,0 +1,11 @@
+@startuml
+title Hello sequences
+
+actor MyFunctionActor
+actor VerificationService
+
+autonumber
+== Claim Verification (?)==
+MyFunctionActor -> VerificationService : Verify a Claim
+VerificationService --> MyFunctionActor : The Claim in Invalid
+@enduml

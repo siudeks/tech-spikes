@@ -27,7 +27,7 @@ import net.siudek.dev.orchestractor.BehSupport;
  * Because the behavior is 'never ending', TBD 
  */
 @RestController
-public class MyControllerA {
+public class MyController1 {
 
   @Autowired
   private BehSupport runner;

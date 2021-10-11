@@ -33,13 +33,27 @@ class SendEmailTask implements ApplicationRunner, ApplicationContextAware {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
+        var port = Integer.toString(587); // 25 default on other servers
+        var server = "smtp.gmail.com";
+
         var prop = System.getProperties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "25");
+        prop.put("mail.smtp.host", server);
+        prop.put("mail.smtp.port", port);
         prop.put("mail.smtp.auth", "true");
+        prop.put("mail.transport.protocol", "smtp");
+
         prop.put("mail.smtp.starttls.enable", "true");
         prop.put("mail.smtp.starttls.required", "true");
-        prop.put("mail.transport.protocol", "smtp");
+        
+        // to solve: javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)
+        // prop.put("mail.smtp.ssl.trust", server);
+
+        // to solve: javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+        // to see in logs more SMTP-related info
+        prop.put("mail.debug", "true");
+
 
         var session = Session.getInstance(prop);
         var msg = new MimeMessage(session);
@@ -49,7 +63,7 @@ class SendEmailTask implements ApplicationRunner, ApplicationContextAware {
                 InternetAddress.parse(mailTo)
         );
         
-        msg.setSubject("Testing Gmail TLS");
+        msg.setSubject("Testing SMTP over TLS");
         msg.setText("Dear Mail Crawler, Please do not spam my email!");
         msg.saveChanges();
 

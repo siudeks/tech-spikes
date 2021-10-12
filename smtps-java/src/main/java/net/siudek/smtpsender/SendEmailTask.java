@@ -1,5 +1,7 @@
 package net.siudek.smtpsender;
 
+import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -36,7 +38,8 @@ class SendEmailTask implements ApplicationRunner, ApplicationContextAware {
         var port = Integer.toString(587); // 25 default on other servers
         var server = "smtp.gmail.com";
 
-        var prop = System.getProperties();
+        var systemProps = System.getProperties();
+        var prop = (Properties) systemProps.clone();
         prop.put("mail.smtp.host", server);
         prop.put("mail.smtp.port", port);
         prop.put("mail.smtp.auth", "true");
@@ -45,9 +48,6 @@ class SendEmailTask implements ApplicationRunner, ApplicationContextAware {
         prop.put("mail.smtp.starttls.enable", "true");
         prop.put("mail.smtp.starttls.required", "true");
         
-        // to solve: javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)
-        // prop.put("mail.smtp.ssl.trust", server);
-
         // to solve: javax.net.ssl.SSLHandshakeException: No appropriate protocol (protocol is disabled or cipher suites are inappropriate)
         prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 

@@ -1,3 +1,6 @@
+# Move files to File Share
+
+
 Required:
 - terraform
 - az tools
@@ -19,12 +22,21 @@ more: https://stackoverflow.com/questions/9733338/shell-script-remove-first-and-
 - **az account set --subscription 'Visual Studio Professional'** to set default subscription. *Replace 'Visual Studio Professional' with your choice*
 - **terraform apply** to create resources, and confirm **yes** when asking about configrmation
 - Optional **azcopy env** to understand meaning of env variables
-- **export AZCOPY_SPA_CLIENT_SECRET=$(eval echo $(terraform output servicePrincipalPassword))** to save value as required, well-known env variable for azcopy
-- **_TENANT_ID=$(eval echo $(terraform output tenantId))** temp variable
-- **_APP_ID=$(eval echo $(terraform output applicationId))** to save value as required, well-known env variable for azcopy
-- **azcopy login --service-principal --tenant-id $_TENANT_ID --application-id $_APP_ID** to login without beign asked about credentials thanks to already defined well-known variables
-- **fallocate -l 10M big_file.bin** to create local big file
+- ***
+  ```bash
+  export AZCOPY_SPA_CLIENT_SECRET=$(eval echo $(terraform output servicePrincipalPassword))
+  _TENANT_ID=$(eval echo $(terraform output tenantId))
+  _APP_ID=$(eval echo $(terraform output applicationId))
+  _STORAGE=$(eval echo $(terraform output storageName))
+  _SHARE=$(eval echo $(terraform output storageName))
+  ```
+  to prepare secret variable for *azcopy* and temp variables to use them later on
+- **azcopy login --service-principal --tenant-id $_TENANT_ID --application-id $_APP_ID** to login based on env secred and temp variables
+- **fallocate -l 100M big_file.bin** to create local big file (100 MB)
 - **???** copy file to remote storage
 - **???** run image with mounted filesystem and create local file
 - **???** check if the file is created in remote azure filesystem
 - **terraform destroy** finally after test to cleanup, and confirm **yes** when asking about configrmation
+
+## Useful articles
+- https://docs.microsoft.com/en-us/azure/storage/common/storage-ref-azcopy-copy

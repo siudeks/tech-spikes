@@ -41,6 +41,7 @@ resource "azuread_application" "example" {
   owners       = [data.azuread_client_config.current.object_id]
 }
 
+# Represents our service principal designed to write / read / list data from azure storage
 resource "azuread_service_principal" "example" {
   application_id               = azuread_application.example.application_id
   app_role_assignment_required = false
@@ -57,6 +58,13 @@ resource "azurerm_storage_container" "example" {
   storage_account_name  = azurerm_storage_account.default.name
   container_access_type = "private"
 }
+
+resource "azurerm_role_assignment" "data_contributor_role" {
+  scope                = azurerm_storage_container.example.resource_manager_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.example.id
+}
+
 
 output "tenantId" {
   value = data.azuread_client_config.current.tenant_id

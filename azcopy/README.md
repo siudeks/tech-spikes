@@ -32,10 +32,9 @@ more: https://stackoverflow.com/questions/9733338/shell-script-remove-first-and-
   _CONTAINER=$(eval echo $(terraform output containerName))
   ```
   to prepare secret variable for *azcopy* and temp variables to use them later on
-- **fallocate -l 100M big_file.bin** to create local big file (100 MB)
+- **fallocate -l 10M big_file.bin** to create local big file (100 MB)
 - **azcopy copy big_file.bin https://$_STORAGE.blob.core.windows.net/$_CONTAINER** copy file to remote storage. Logged thanks to https://github.com/Azure/azure-storage-azcopy/wiki/Improved-login-support-for-AzCopy-commands-(with-in-memory-secret-store)
-- **???** run image with mounted filesystem and create local file
-- **???** check if the file is created in remote azure filesystem
+- **azcopy list https://$_STORAGE.blob.core.windows.net/$_CONTAINER** check if the file is created in remote azure filesystem
 - **terraform destroy** finally after test to cleanup, and confirm **yes** when asking about configrmation
 
 ## Useful articles

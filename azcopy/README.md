@@ -1,4 +1,4 @@
-# Move files to File Share
+# copy files to Azure Storage using Terraform and azcopy
 
 
 Required:

@@ -13,7 +13,7 @@ Required:
     ```
 
 Note: we use *eval echo* in bash to remove from variables first and last quote because output from terraform contains quotes, but parameters of azcopy do not accept quotes
-E.g. value "6b4f6921-321f-4a4f-aadd-e8fc504f2500" produced by Terraofmr output has to be converted to 6b4f6921-321f-4a4f-aadd-e8fc504f2500  
+E.g. value "6b4f6921-321f-4a4f-aadd-e8fc504f2500" produced by Terraform output has to be converted to 6b4f6921-321f-4a4f-aadd-e8fc504f2500  
 more: https://stackoverflow.com/questions/9733338/shell-script-remove-first-and-last-quote-from-a-variable#
 
 - **terraform init** to install providers
@@ -25,15 +25,15 @@ more: https://stackoverflow.com/questions/9733338/shell-script-remove-first-and-
 - ***
   ```bash
   export AZCOPY_SPA_CLIENT_SECRET=$(eval echo $(terraform output servicePrincipalPassword))
-  _TENANT_ID=$(eval echo $(terraform output tenantId))
-  _APP_ID=$(eval echo $(terraform output applicationId))
+  export AZCOPY_SPA_APPLICATION_ID=$(eval echo $(terraform output applicationId))
+  export AZCOPY_TENANT_ID=$(eval echo $(terraform output tenantId))
+  export AZCOPY_AUTO_LOGIN_TYPE=SPN
   _STORAGE=$(eval echo $(terraform output storageName))
-  _SHARE=$(eval echo $(terraform output storageName))
+  _CONTAINER=$(eval echo $(terraform output containerName))
   ```
   to prepare secret variable for *azcopy* and temp variables to use them later on
-- **azcopy login --service-principal --tenant-id $_TENANT_ID --application-id $_APP_ID** to login based on env secred and temp variables
 - **fallocate -l 100M big_file.bin** to create local big file (100 MB)
-- **???** copy file to remote storage
+- **azcopy copy big_file.bin https://$_STORAGE.blob.core.windows.net/$_CONTAINER** copy file to remote storage. Logged thanks to https://github.com/Azure/azure-storage-azcopy/wiki/Improved-login-support-for-AzCopy-commands-(with-in-memory-secret-store)
 - **???** run image with mounted filesystem and create local file
 - **???** check if the file is created in remote azure filesystem
 - **terraform destroy** finally after test to cleanup, and confirm **yes** when asking about configrmation

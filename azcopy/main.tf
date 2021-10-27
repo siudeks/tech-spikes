@@ -52,12 +52,11 @@ resource "azuread_service_principal_password" "secret" {
 }
 
 
-resource "azurerm_storage_share" "example" {
-  name                 = "sharename"
-  storage_account_name = azurerm_storage_account.default.name
-  quota                = 50
+resource "azurerm_storage_container" "example" {
+  name                  = "content"
+  storage_account_name  = azurerm_storage_account.default.name
+  container_access_type = "private"
 }
-
 
 output "tenantId" {
   value = data.azuread_client_config.current.tenant_id
@@ -71,8 +70,8 @@ output "storageName" {
   value = azurerm_storage_account.default.name
 }
 
-output "shareName" {
-  value = azurerm_storage_share.example.name
+output "containerName" {
+  value = azurerm_storage_container.example.name
 }
 
 output "servicePrincipalPassword" {

@@ -5,7 +5,7 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 ## Option: WSL2
 - of course [install WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 - enable [remote WSL2 extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) to integrate your VSCode with WSL2
-- [reuse yours .ssh windows folder in WSL2](https://devblogs.microsoft.com/commandline/sharing-ssh-keys-between-windows-and-wsl-2/)
+- (optionally) [reuse yours .ssh windows folder in WSL2](https://devblogs.microsoft.com/commandline/sharing-ssh-keys-between-windows-and-wsl-2/)
 - [install kubernetes](https://gist.github.com/wholroyd/748e09ca0b78897750791172b2abb051)
 
 ## Option: Ubuntu

@@ -1,0 +1,6 @@
+.terraform
+.terraform.lock.hcl
+big_file.bin
+terraform.tfstate
+terraform.tfstate.backup
+azcopy

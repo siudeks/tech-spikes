@@ -7,7 +7,6 @@ export const RightPanel: React.FC<{}> = props => {
 
     return (
         < Stack
-            grow
             styles={{
                 root: {
                     width: "100%",
@@ -17,7 +16,6 @@ export const RightPanel: React.FC<{}> = props => {
         >
             <Stack.Item verticalFill>
                 <Stack
-                    grow
                     styles={{
                         root: {
                             height: "100%",

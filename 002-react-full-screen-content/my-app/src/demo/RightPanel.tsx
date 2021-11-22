@@ -8,12 +8,8 @@ export const RightPanel: React.FC<{}> = props => {
     return (
         < Stack
             styles={{
-                root: {
-                    width: "100%",
-                    height: "100%",
-                },
-            }}
-        >
+                root: { width: "100%", height: "100%" }
+            }}>
             <Stack.Item verticalFill>
                 <Stack
                     styles={{

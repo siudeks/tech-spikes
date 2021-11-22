@@ -1,7 +1,0 @@
-target/
-!**/src/main/**
-!**/src/test/**
-
-### VS Code ###
-.vscode/
-.factorypath

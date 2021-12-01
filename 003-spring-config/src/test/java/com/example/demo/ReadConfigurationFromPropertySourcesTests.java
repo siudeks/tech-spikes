@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-ci.properties")
 @EnableConfigurationProperties(PersonConfig.class)
-public class TestConfiguration {
+public class ReadConfigurationFromPropertySourcesTests {
 
     @Autowired
     PersonConfig personConfig;

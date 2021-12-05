@@ -1,8 +1,0 @@
-azure-functions-core-tools
-
-appsettings.json
-local.settings.json
-
-node_modules
-dist
-

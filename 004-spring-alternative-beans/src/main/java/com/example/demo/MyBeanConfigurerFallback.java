@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -8,12 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 @Configuration
-public class MyBeanConfigurerOptionDefault {
+public class MyBeanConfigurerFallback {
     
     @Bean
-    @ConditionalOnProperty(name = "my-variable")
-    @Order(10)
-    Optional<MyBean> myDefaultBean() {
-        return Optional.of(new MyBean("my default bean"));
+    @Order(20)
+    Optional<MyBean> myFallbackBean(List<Optional<MyBean>> beans) {
+        if (!beans.isEmpty()) return Optional.empty();
+
+        return Optional.of(new MyBean("my fallback bean"));
     }
 }

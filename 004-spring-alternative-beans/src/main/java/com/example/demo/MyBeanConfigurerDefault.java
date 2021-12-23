@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 @Configuration
-public class MyBeanConfigurerOptionAlternative {
+public class MyBeanConfigurerDefault {
     
     @Bean
-    @Order(20)
-    Optional<MyBean> myAlternativeBean() {
-        return Optional.of(new MyBean("my alternative bean"));
+    @ConditionalOnProperty(name = "my-variable")
+    @Order(100)
+    Optional<MyBean> myDefaultBean() {
+        return Optional.of(new MyBean("my default bean"));
     }
 }

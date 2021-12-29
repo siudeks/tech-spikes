@@ -9,6 +9,16 @@ import lombok.Data;
 @ConfigurationProperties("person")
 @Data
 class PersonConfig {
+
     private String name;
+
+    public void setName(String value) {
+        name = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     private String surname;
 }

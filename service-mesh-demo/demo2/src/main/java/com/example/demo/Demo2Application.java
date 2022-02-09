@@ -1,4 +1,4 @@
-package com.example.demo1;
+package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -11,19 +11,16 @@ import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @RestController
-public class Demo1Application {
+public class Demo2Application {
 
-	@Autowired
-	WebClient webClient;
-
-	@GetMapping
+	@GetMapping(path = "/")
 	public Mono<String> get() {
-		var message = "Service1";
+		var message = "Service2";
 		return Mono.just(message);
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Demo1Application.class, args);
+		SpringApplication.run(Demo2Application.class, args);
 	}
 
 }

@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  demo1:
+    build:
+      context: demo1
+      dockerfile: Dockerfile
+    environment:
+      - SERVICE2_ADDRESS=http://localhost:8082
+    ports:
+      - 8081:8081
+    network_mode: host
+  demo2:
+    build:
+      context: demo2
+      dockerfile: Dockerfile
+    ports:
+      - 8082:8082
+    network_mode: host

@@ -1,0 +1,1 @@
+Tests about working with not stale connections with database - e.g. changed password  to database connection

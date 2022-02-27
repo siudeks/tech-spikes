@@ -21,17 +21,3 @@ spec:
         backend:
           serviceName: kiali
           servicePort: 20001
-  # - http:
-  #     paths:
-  #     - path: /
-  #       pathType: Prefix
-  #       backend:
-  #         serviceName: grafana
-  #         servicePort: 3000
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          serviceName: tracing
-          servicePort: 9411

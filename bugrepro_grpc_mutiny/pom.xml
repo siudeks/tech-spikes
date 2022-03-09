@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>onlexnet.sinnet.demo</groupId>
+    <artifactId>example-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>grpc-contract</module>
+        <module>grpc-client</module>
+    </modules>
+
+    <properties>
+        <quarkus.platform.version>2.7.3.Final</quarkus.platform.version>
+        <quarkus-plugin.version>2.7.3.Final</quarkus-plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>allow-snapshots</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>snapshots-repo</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

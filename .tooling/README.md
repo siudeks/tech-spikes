@@ -20,7 +20,7 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - install [dotnet](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu)
 - install [Node Version Manager](https://github.com/nvm-sh/nvm)
 - [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt)
-- [Install Terraform on WSL2](https://techcommunity.microsoft.com/t5/Azure-Developer-Community-Blog/Configuring-Terraform-on-Windows-10-Linux-Sub-System/ba-p/393845)
+- [Install Terraform](https://www.terraform.io/downloads)
 - [Install Docker on WSL2](https://dev.to/bartr/install-docker-on-windows-subsystem-for-linux-v2-ubuntu-5dl7)
 - Install [go](https://www.linuxfordevices.com/tutorials/ubuntu/install-go-on-ubuntu-debian)
 - **sudo apt install python3 python3-pip ipython3** to install python 3

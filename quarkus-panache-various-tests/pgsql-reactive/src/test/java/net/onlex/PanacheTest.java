@@ -23,7 +23,6 @@ class PanacheTest {
         var entity1 = new MyClient();
         entity1.id = eId;
         entity1.name = "my name";
-        entity1.version = 0;
         clientRepository.persistAndFlush(entity1).await().indefinitely();
         
         var newEntityCopy1 = clientRepository.findById(eId, LockModeType.OPTIMISTIC_FORCE_INCREMENT).await().indefinitely();

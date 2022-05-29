@@ -13,7 +13,7 @@ Reproduction steps:
         Client
         (name, id) 
     values
-        (1, 'my name')
+        ('my name', 1)
    ```  
    Actual
    ```

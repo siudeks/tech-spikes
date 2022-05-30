@@ -161,13 +161,11 @@ class PanacheTest {
         var finish = new CyclicBarrier(2, main::release);
 
         var eId1 = 1L;
-        var eId2 = 2L;
         var initialName = "my name";
         var changedName = "my name - modified";
 
         // prepare initial entities
         dbService.runTransactional(() -> create(eId1, initialName));
-        dbService.runTransactional(() -> create(eId2, initialName));
 
         var semaphore1 = new Semaphore(0);
         var semaphore2 = new Semaphore(0);
@@ -194,7 +192,7 @@ class PanacheTest {
             // 1. After read initial value
             semaphore1.acquire();
 
-            update(eId1, changedName);
+            //update(eId1, changedName);
 
             // T2 reads name
             semaphore2.release();

@@ -1,7 +1,5 @@
 package net.onlex;
 
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Version;
@@ -10,7 +8,7 @@ import javax.persistence.Version;
 public class MyClient {
     
     @Id
-    public UUID id;
+    public Long id;
     @Version
     public Integer version;
     

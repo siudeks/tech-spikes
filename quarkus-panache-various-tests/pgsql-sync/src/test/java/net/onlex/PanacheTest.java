@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.LockModeType;
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -192,7 +193,7 @@ class PanacheTest {
             // 1. After read initial value
             semaphore1.acquire();
 
-            //update(eId1, changedName);
+            update(eId1, changedName);
 
             // T2 reads name
             semaphore2.release();
@@ -204,7 +205,7 @@ class PanacheTest {
         var t1future = executor.submit(() -> dbService.runTransactional(t1));
         var t2future = executor.submit(() -> dbService.runTransactional(t2));
 
-        t1future.get();
+        Assertions.assertThatCode(t1future::get).isInstanceOf(OptimisticLockException.class);
         t2future.get();
 
         main.acquire();

@@ -1,0 +1,1 @@
+Communication between uServices usin DAPR, pub-sub, Spring and Quarkus

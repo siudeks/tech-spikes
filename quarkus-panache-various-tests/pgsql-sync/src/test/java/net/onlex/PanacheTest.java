@@ -3,19 +3,20 @@ package net.onlex;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.LockModeType;
-import javax.persistence.OptimisticLockException;
+import javax.transaction.RollbackException;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +45,6 @@ class PanacheTest {
 
     @SneakyThrows
     @Test
-    @Disabled
     void should_protect_readonly_entity() {
         var eId = 1L;
         dbService.create(eId, "my name");
@@ -176,6 +176,7 @@ class PanacheTest {
             var onExit = (AutoCloseable) () -> finish.await();
 
             var myEntity = clientRepository.findById(eId1, LockModeType.OPTIMISTIC);
+
             // 1. Inform T2 name has been read
             semaphore1.release();
 
@@ -195,7 +196,7 @@ class PanacheTest {
 
             update(eId1, changedName);
 
-            // T2 reads name
+            // 2. allow T2 finish with assumption name is not changed
             semaphore2.release();
 
             return null;
@@ -204,11 +205,13 @@ class PanacheTest {
         var executor = Executors.newCachedThreadPool();
         var t1future = executor.submit(() -> dbService.runTransactional(t1));
         var t2future = executor.submit(() -> dbService.runTransactional(t2));
-
-        Assertions.assertThatCode(t1future::get).isInstanceOf(OptimisticLockException.class);
-        t2future.get();
-
         main.acquire();
+
+        Assertions.assertThatCode(t1future::get)
+            .isInstanceOf(ExecutionException.class)
+            .getCause().isInstanceOf(RollbackException.class)
+            .getCause().isInstanceOf(OptimisticEntityLockException.class);
+
     }
 
 
@@ -225,10 +228,6 @@ class PanacheTest {
         myEntity.name = newName;
         clientRepository.flush();
     }
-}
-
-interface TestRunnable {
-    void run() throws Exception;
 }
 
 @Transactional
@@ -269,8 +268,7 @@ class MyClass1 {
     }
 
     @Transactional
-    @SneakyThrows
-    <T> T runTransactional(Callable<T> runnable) {
+    <T> T runTransactional(Callable<T> runnable) throws Exception {
         return runnable.call();
     }
 }

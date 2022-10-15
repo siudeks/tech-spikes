@@ -1,4 +1,4 @@
-# AVRO maven compiler does not generate classes from linekd folder
+# AVRO maven compiler does not generate classes from linked folder
 
 ## Used environment:
 - java 17

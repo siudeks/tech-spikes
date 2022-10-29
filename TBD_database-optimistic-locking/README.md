@@ -1,0 +1,1 @@
+Krótki pokaz o referencji do Entities z ich aktualizacją, odczytem i optymistycznym blokowanie,

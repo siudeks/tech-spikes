@@ -23,6 +23,7 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - [Install Terraform](https://www.terraform.io/downloads)
 - [Install Docker on WSL2](https://dev.to/bartr/install-docker-on-windows-subsystem-for-linux-v2-ubuntu-5dl7)
 - Install minikube on WSL
+- [Install podman on WSL](https://www.redhat.com/sysadmin/podman-windows-wsl2)
 - Install [KWOK](https://kwok.sigs.k8s.io/) to test application without PODs
 - [Install skaffold](https://skaffold.dev/docs/install/)
 - **sudo apt install python3 python3-pip ipython3** to install python 3

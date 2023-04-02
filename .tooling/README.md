@@ -8,9 +8,6 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - (optionally) [reuse yours .ssh windows folder in WSL2](https://devblogs.microsoft.com/commandline/sharing-ssh-keys-between-windows-and-wsl-2/)
 - [install kubernetes with docker](https://gist.github.com/wholroyd/748e09ca0b78897750791172b2abb051)
 
-## Option: Ubuntu
-- [install kubernetes](https://ubuntu.com/kubernetes/install#single-node)
-
 ## Common part for: WSL2 / Ubuntu
 - install [sdk man](https://sdkman.io/install) and then
   - **sdk list** or **sdk list java** to see list of available software, and as the next step e.g.
@@ -21,7 +18,6 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - install [Node Version Manager](https://github.com/nvm-sh/nvm)
 - [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt)
 - [Install Terraform](https://www.terraform.io/downloads)
-- [Install Docker on WSL2](https://dev.to/bartr/install-docker-on-windows-subsystem-for-linux-v2-ubuntu-5dl7)
 - Install minikube on WSL
 - [Install podman on WSL](https://www.redhat.com/sysadmin/podman-windows-wsl2)
 - Install [KWOK](https://kwok.sigs.k8s.io/) to test application without PODs

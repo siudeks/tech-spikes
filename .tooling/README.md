@@ -23,4 +23,4 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - [Install podman on WSL](https://www.redhat.com/sysadmin/podman-windows-wsl2)
 - Install [KWOK](https://kwok.sigs.k8s.io/) to test application without PODs
 - [Install skaffold](https://skaffold.dev/docs/install/)
-- **sudo apt install python3 python3-pip ipython3** to install python 3
+- install python 3: **sudo apt install python3 python3-pip ipython3**

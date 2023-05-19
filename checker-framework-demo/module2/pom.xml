@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.example</groupId>
+	<artifactId>demo2</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>demo1</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<release>17</release>
+					<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
+					<compilerArguments>
+						<Xmaxerrs>10000</Xmaxerrs>
+						<Xmaxwarns>10000</Xmaxwarns>
+					</compilerArguments>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.checkerframework</groupId>
+							<artifactId>checker</artifactId>
+							<version>3.34.0</version>
+						</path>
+						<path>
+							<groupId>com.example</groupId>
+							<artifactId>demo1</artifactId>
+							<version>0.0.1-SNAPSHOT</version>
+						</path>
+					</annotationProcessorPaths>
+					<annotationProcessors>
+						<annotationProcessor>org.checkerframework.common.subtyping.SubtypingChecker</annotationProcessor>
+					</annotationProcessors>
+					<compilerArgs>
+						<arg>-AqualDirs=../module1/target/classes</arg>
+						<arg>-Aquals=org.checkerframework.common.subtyping.qual.Unqualified</arg>
+						<!-- <arg>-Aquals=com.example.demo.qual.DomainObject</arg> -->
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+						<arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

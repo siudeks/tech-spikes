@@ -7,7 +7,7 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - enable [remote WSL2 extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) to integrate your VSCode with WSL2
 - [install Docker](https://adsorder-dev.netlify.app/cuan-https-techcommunity.microsoft.com/t5/itops-talk-blog/using-wsl-2-on-windows-server-2022-to-run-linux-containers/ba-p/3624745), in my case [such fix](https://github.com/microsoft/WSL/issues/9868#issuecomment-1490060424) was required as well  
 - Simplyfy your dev experience by [executing the Docker command without sudo](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04#step-2-executing-the-docker-command-without-sudo-optional)
-- [install minikube on to of working Docker](https://minikube.sigs.k8s.io/docs/start/)
+- [install minikube on top of working Docker](https://minikube.sigs.k8s.io/docs/start/)
 
 ## Common part for: WSL2 / Ubuntu
 - install [sdk man](https://sdkman.io/install) and then

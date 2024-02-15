@@ -1,5 +1,8 @@
 # ADT types and strategies
 
+How to article: https://www.infoq.com/guidelines/
+
+
 - Introduce ADT types
 - Exhaustive pattern matching with 'eval' function
 - Comparison with 'Either' type

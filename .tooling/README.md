@@ -20,7 +20,7 @@ if you decided to use VSCode remote WSL2 extension, find below my list of tools 
 - [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt)
 - [Install Terraform](https://www.terraform.io/downloads)
 - Install minikube on WSL
-- install python 3: **sudo apt install python3 python3-pip ipython3**
+- install python 3: **sudo apt install python3.11 python3-pip ipython3**
 
 Not used currently:
 - [Install podman on WSL](https://www.redhat.com/sysadmin/podman-windows-wsl2)

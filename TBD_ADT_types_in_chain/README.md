@@ -58,3 +58,35 @@ void setAndVerifyBasketValue(Measure measure, Long basketId, boolean isBasket) {
         measure.setBasketId(null);
     }
 }
+
+
+
+class InterpolationCorategy {
+
+    StrategyType: enum // w zaleznosci od enum pola poniżej są wypełniane
+    field1Name
+    field1Unit
+    field2Name
+    field2Unit
+
+}
+
+
+
+
+innym przykłądem jest przenoszenie obiektu prezz flow, gdzie jest on swojego rodzaju builderem, zaś niewiedza oa ym pozwala odczytywać jego nieprzetwaorzone części bez wiedzy ze to nie jest finalna postać
+
+
+Example:
+Preconditions,checkArgument(group.isValid())
+
+
+
+public boolean isValid() {
+    return allocationResult != null && allocationResult.getMappingAllocationResult() != null && allocationResult.getMappingAllocationResult().isValue()
+}
+
+
+Inny przykład: stosowanie ścieżki do danych
+jeżeli DATA_LOCATION = "ABC" użyj provider Abc
+w innym przypadku oznacza to fizyczną lokację danych i należy je po prostu wczytać

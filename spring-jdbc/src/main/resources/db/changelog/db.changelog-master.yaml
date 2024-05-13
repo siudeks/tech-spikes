@@ -1,0 +1,30 @@
+databaseChangeLog:
+-  changeSet:
+    id:  create-table-accounts
+    author:  siudeks
+    changes:
+    -  createTable:
+        tableName:  accounts
+        columns:
+        -  column:
+            name: ID
+            type: int
+            constraints:
+              primaryKey: true
+        -  column:
+            name: amount
+            type: float
+            constraints:
+              nullable: false
+-  changeSet:
+    id:  table-accounts-version
+    author:  siudeks
+    changes:
+    -  addColumn:
+        tableName:  accounts
+        columns:
+        -  column:
+            name: version
+            type: int
+            constraints:
+              nullable: false

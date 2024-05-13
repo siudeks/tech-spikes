@@ -1,6 +1,12 @@
+How to article: https://www.infoq.com/guidelines/
+
 # ADT types and strategies
 
-How to article: https://www.infoq.com/guidelines/
+Poznaj nowego przyjaciela: Typy Algebraiczne. Niech Cię nie zwiedzie surowość tej nazwy, drzemie tam deszcz obietnic
+
+Nasz Nowy Cudowny Serwis przetwarza obiekt wejściowy klasy Request na 
+
+## Pola Schrödingera
 
 
 - Introduce ADT types
@@ -90,3 +96,11 @@ public boolean isValid() {
 Inny przykład: stosowanie ścieżki do danych
 jeżeli DATA_LOCATION = "ABC" użyj provider Abc
 w innym przypadku oznacza to fizyczną lokację danych i należy je po prostu wczytać
+
+Kiedy 'specjalna' opcja jest null-em ale ktośbędzie próbowałstworzyć mapę, wtedy Null wywala stolik bo nie może być użyty
+
+
+
+Potem powstają metody z podobnymi nazwami
+whenValieType(...)
+whenInvalidType(...)

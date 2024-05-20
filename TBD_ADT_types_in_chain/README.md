@@ -104,3 +104,8 @@ Kiedy 'specjalna' opcja jest null-em ale ktośbędzie próbowałstworzyć mapę,
 Potem powstają metody z podobnymi nazwami
 whenValieType(...)
 whenInvalidType(...)
+
+
+po wprowadzeniu metody isvalid, ponieważ jest ona metodą z logikąw środku, wymaga ona
+- utrzymania
+- mockowanie (ponieważ jest tylko metodą read only)

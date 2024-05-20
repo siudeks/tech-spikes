@@ -107,5 +107,5 @@ whenInvalidType(...)
 
 
 po wprowadzeniu metody isvalid, ponieważ jest ona metodą z logikąw środku, wymaga ona
-- utrzymania
-- mockowanie (ponieważ jest tylko metodą read only)
+- utrzymania (ponieważ dedukuje stan na podstawie kompletności elementów wewnętrznych, np czy kolekcja jest nie pusta)
+- mockowania (ponieważ jest tylko metodą read only)

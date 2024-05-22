@@ -1,6 +1,11 @@
 How to article: https://www.infoq.com/guidelines/
 
-# ADT types and strategies
+# Story
+
+mamy aplikację3 warstwową: 
+- http layer, z obiektami DTO
+- domain layer cokolwiek to znaczy)
+- persistence layer gdzie dysponujemy obiektami Dbo przystosowanymi do serializacji do bazy danych
 
 Poznaj nowego przyjaciela: Typy Algebraiczne. Niech Cię nie zwiedzie surowość tej nazwy, drzemie tam deszcz obietnic
 
@@ -109,3 +114,6 @@ whenInvalidType(...)
 po wprowadzeniu metody isvalid, ponieważ jest ona metodą z logikąw środku, wymaga ona
 - utrzymania (ponieważ dedukuje stan na podstawie kompletności elementów wewnętrznych, np czy kolekcja jest nie pusta)
 - mockowania (ponieważ jest tylko metodą read only)
+
+
+- pokazać dziedziczenie (lub używanie interfejsów) aby przemycać różne typye przez te same sygnatury

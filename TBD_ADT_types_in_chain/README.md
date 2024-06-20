@@ -85,7 +85,7 @@ class InterpolationCorategy {
 
 
 
-innym przykłądem jest przenoszenie obiektu prezz flow, gdzie jest on swojego rodzaju builderem, zaś niewiedza oa ym pozwala odczytywać jego nieprzetwaorzone części bez wiedzy ze to nie jest finalna postać
+innym przykładem jest przenoszenie obiektu prezz flow, gdzie jest on swojego rodzaju builderem, zaś niewiedza oa ym pozwala odczytywać jego nieprzetwaorzone części bez wiedzy ze to nie jest finalna postać
 
 
 Example:

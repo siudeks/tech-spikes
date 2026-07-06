@@ -1,4 +1,4 @@
-# How to use SubtypingChecker
+# How to use FenumChecker
 
 ## Links
-- [SubtypingChecker docs](https://checkerframework.org/manual/#subtyping-checker)
+- [Fenum Checker docs](https://checkerframework.org/manual/#fenum-checks)

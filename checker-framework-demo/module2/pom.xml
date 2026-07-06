@@ -6,7 +6,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>25</java.version>
+		<checkerframework.version>3.53.0</checkerframework.version>
 	</properties>
 	<dependencies>
 
@@ -14,6 +15,11 @@
 			<groupId>com.example</groupId>
 			<artifactId>demo1</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.checkerframework</groupId>
+			<artifactId>checker-qual</artifactId>
+			<version>${checkerframework.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -37,7 +43,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version>
 				<configuration>
-					<release>17</release>
+					<release>${java.version}</release>
 					<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
 					<compilerArguments>
 						<Xmaxerrs>10000</Xmaxerrs>
@@ -47,7 +53,7 @@
 						<path>
 							<groupId>org.checkerframework</groupId>
 							<artifactId>checker</artifactId>
-							<version>3.34.0</version>
+							<version>${checkerframework.version}</version>
 						</path>
 						<path>
 							<groupId>com.example</groupId>
@@ -56,12 +62,10 @@
 						</path>
 					</annotationProcessorPaths>
 					<annotationProcessors>
-						<annotationProcessor>org.checkerframework.common.subtyping.SubtypingChecker</annotationProcessor>
+						<annotationProcessor>org.checkerframework.checker.fenum.FenumChecker</annotationProcessor>
 					</annotationProcessors>
 					<compilerArgs>
 						<arg>-AqualDirs=../module1/target/classes</arg>
-						<arg>-Aquals=org.checkerframework.common.subtyping.qual.Unqualified</arg>
-						<!-- <arg>-Aquals=com.example.demo.qual.DomainObject</arg> -->
 						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
 						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
 						<arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>

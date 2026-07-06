@@ -14,14 +14,15 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>25</java.version>
+		<checkerframework.version>3.53.0</checkerframework.version>
 	</properties>
 	<dependencies>
 
 		<dependency>
 			<groupId>org.checkerframework</groupId>
 			<artifactId>checker-qual</artifactId>
-			<version>3.34.0</version>
+			<version>${checkerframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -34,7 +35,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
+				<version>3.14.1</version>
 			</plugin>
 		</plugins>
 	</build>
